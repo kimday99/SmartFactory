@@ -35,19 +35,46 @@
             tab_things = new TabControl();
             page_box = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
-            lb_checkcnt = new Label();
-            lb_greencnt = new Label();
+            lb_ngcnt_b = new Label();
             lb_redcnt = new Label();
-            lb_ngcnt = new Label();
+            lb_checkcnt_b = new Label();
             lb_yellowcnt = new Label();
-            lb_ng = new Label();
+            lb_greencnt = new Label();
+            lb_ng_b = new Label();
             lb_yellow = new Label();
             lb_green = new Label();
             lb_red = new Label();
-            lb_check = new Label();
+            lb_check_b = new Label();
             page_milk = new TabPage();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            lb_checkcnt_m = new Label();
+            lb_ngcnt_m = new Label();
+            lb_okcnt = new Label();
+            lb_ng_m = new Label();
+            lb_ok = new Label();
+            lb_check_m = new Label();
             pnl_cam = new Panel();
             group_info = new GroupBox();
+            cb_status = new ComboBox();
+            lb_searchst = new Label();
+            btn_adapt = new Button();
+            lb_end = new Label();
+            dt_end = new DateTimePicker();
+            lb_start = new Label();
+            dt_start = new DateTimePicker();
+            btn_load = new Button();
+            btn_del = new Button();
+            btn_modify = new Button();
+            tb_date = new TextBox();
+            tb_status = new TextBox();
+            tb_cou = new TextBox();
+            tb_url = new TextBox();
+            tb_id = new TextBox();
+            lb_status = new Label();
+            lb_cou = new Label();
+            lb_url = new Label();
+            lb_date = new Label();
+            lb_id = new Label();
             pb_search = new PictureBox();
             group_trans = new GroupBox();
             btn_logdel = new Button();
@@ -65,6 +92,8 @@
             tab_things.SuspendLayout();
             page_box.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            page_milk.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             group_info.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_search).BeginInit();
             group_trans.SuspendLayout();
@@ -75,9 +104,9 @@
             // btn_start
             // 
             btn_start.Font = new Font("맑은 고딕", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
-            btn_start.Location = new Point(616, 234);
+            btn_start.Location = new Point(656, 226);
             btn_start.Name = "btn_start";
-            btn_start.Size = new Size(200, 110);
+            btn_start.Size = new Size(200, 70);
             btn_start.TabIndex = 0;
             btn_start.Text = "START";
             btn_start.UseVisualStyleBackColor = true;
@@ -85,16 +114,16 @@
             // btn_stop
             // 
             btn_stop.Font = new Font("맑은 고딕", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
-            btn_stop.Location = new Point(616, 350);
+            btn_stop.Location = new Point(656, 302);
             btn_stop.Name = "btn_stop";
-            btn_stop.Size = new Size(200, 110);
+            btn_stop.Size = new Size(200, 70);
             btn_stop.TabIndex = 1;
             btn_stop.Text = "STOP";
             btn_stop.UseVisualStyleBackColor = true;
             // 
             // pb_histo
             // 
-            pb_histo.Location = new Point(616, 12);
+            pb_histo.Location = new Point(656, 10);
             pb_histo.Name = "pb_histo";
             pb_histo.Size = new Size(200, 200);
             pb_histo.TabIndex = 3;
@@ -104,19 +133,19 @@
             // 
             cmb_obj.DropDownStyle = ComboBoxStyle.Simple;
             cmb_obj.FormattingEnabled = true;
-            cmb_obj.Location = new Point(265, 149);
+            cmb_obj.Location = new Point(6, 253);
             cmb_obj.Name = "cmb_obj";
-            cmb_obj.Size = new Size(726, 333);
+            cmb_obj.Size = new Size(985, 318);
             cmb_obj.TabIndex = 4;
             // 
             // tab_things
             // 
             tab_things.Controls.Add(page_box);
             tab_things.Controls.Add(page_milk);
-            tab_things.Location = new Point(822, 12);
+            tab_things.Location = new Point(862, 12);
             tab_things.Name = "tab_things";
             tab_things.SelectedIndex = 0;
-            tab_things.Size = new Size(850, 448);
+            tab_things.Size = new Size(810, 360);
             tab_things.TabIndex = 5;
             // 
             // page_box
@@ -125,7 +154,7 @@
             page_box.Location = new Point(4, 24);
             page_box.Name = "page_box";
             page_box.Padding = new Padding(3);
-            page_box.Size = new Size(842, 420);
+            page_box.Size = new Size(802, 332);
             page_box.TabIndex = 0;
             page_box.Text = "박스";
             page_box.UseVisualStyleBackColor = true;
@@ -138,52 +167,38 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.Controls.Add(lb_checkcnt, 0, 1);
-            tableLayoutPanel1.Controls.Add(lb_greencnt, 0, 1);
+            tableLayoutPanel1.Controls.Add(lb_ngcnt_b, 4, 1);
             tableLayoutPanel1.Controls.Add(lb_redcnt, 0, 1);
-            tableLayoutPanel1.Controls.Add(lb_ngcnt, 0, 1);
+            tableLayoutPanel1.Controls.Add(lb_checkcnt_b, 0, 1);
             tableLayoutPanel1.Controls.Add(lb_yellowcnt, 0, 1);
-            tableLayoutPanel1.Controls.Add(lb_ng, 4, 0);
+            tableLayoutPanel1.Controls.Add(lb_greencnt, 0, 1);
+            tableLayoutPanel1.Controls.Add(lb_ng_b, 4, 0);
             tableLayoutPanel1.Controls.Add(lb_yellow, 3, 0);
             tableLayoutPanel1.Controls.Add(lb_green, 2, 0);
             tableLayoutPanel1.Controls.Add(lb_red, 1, 0);
-            tableLayoutPanel1.Controls.Add(lb_check, 0, 0);
-            tableLayoutPanel1.Location = new Point(6, 3);
+            tableLayoutPanel1.Controls.Add(lb_check_b, 0, 0);
+            tableLayoutPanel1.Location = new Point(-4, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 28.5714283F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 71.42857F));
-            tableLayoutPanel1.Size = new Size(830, 414);
+            tableLayoutPanel1.Size = new Size(806, 334);
             tableLayoutPanel1.TabIndex = 7;
             // 
-            // lb_checkcnt
+            // lb_ngcnt_b
             // 
-            lb_checkcnt.AutoSize = true;
-            lb_checkcnt.BackColor = Color.Transparent;
-            lb_checkcnt.BorderStyle = BorderStyle.FixedSingle;
-            lb_checkcnt.Dock = DockStyle.Fill;
-            lb_checkcnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lb_checkcnt.Location = new Point(3, 118);
-            lb_checkcnt.Name = "lb_checkcnt";
-            lb_checkcnt.Size = new Size(160, 296);
-            lb_checkcnt.TabIndex = 9;
-            lb_checkcnt.Text = "0";
-            lb_checkcnt.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lb_greencnt
-            // 
-            lb_greencnt.AutoSize = true;
-            lb_greencnt.BackColor = Color.Transparent;
-            lb_greencnt.BorderStyle = BorderStyle.FixedSingle;
-            lb_greencnt.Dock = DockStyle.Fill;
-            lb_greencnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lb_greencnt.ForeColor = Color.Green;
-            lb_greencnt.Location = new Point(335, 118);
-            lb_greencnt.Name = "lb_greencnt";
-            lb_greencnt.Size = new Size(160, 296);
-            lb_greencnt.TabIndex = 8;
-            lb_greencnt.Text = "0";
-            lb_greencnt.TextAlign = ContentAlignment.MiddleCenter;
+            lb_ngcnt_b.AutoSize = true;
+            lb_ngcnt_b.BackColor = Color.Transparent;
+            lb_ngcnt_b.BorderStyle = BorderStyle.FixedSingle;
+            lb_ngcnt_b.Dock = DockStyle.Fill;
+            lb_ngcnt_b.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_ngcnt_b.ForeColor = Color.Purple;
+            lb_ngcnt_b.Location = new Point(647, 95);
+            lb_ngcnt_b.Name = "lb_ngcnt_b";
+            lb_ngcnt_b.Size = new Size(156, 239);
+            lb_ngcnt_b.TabIndex = 10;
+            lb_ngcnt_b.Text = "0";
+            lb_ngcnt_b.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lb_redcnt
             // 
@@ -193,27 +208,27 @@
             lb_redcnt.Dock = DockStyle.Fill;
             lb_redcnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
             lb_redcnt.ForeColor = Color.Red;
-            lb_redcnt.Location = new Point(169, 118);
+            lb_redcnt.Location = new Point(164, 95);
             lb_redcnt.Name = "lb_redcnt";
-            lb_redcnt.Size = new Size(160, 296);
-            lb_redcnt.TabIndex = 7;
+            lb_redcnt.Size = new Size(155, 239);
+            lb_redcnt.TabIndex = 9;
             lb_redcnt.Text = "0";
             lb_redcnt.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lb_ngcnt
+            // lb_checkcnt_b
             // 
-            lb_ngcnt.AutoSize = true;
-            lb_ngcnt.BackColor = Color.Transparent;
-            lb_ngcnt.BorderStyle = BorderStyle.FixedSingle;
-            lb_ngcnt.Dock = DockStyle.Fill;
-            lb_ngcnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lb_ngcnt.ForeColor = Color.Purple;
-            lb_ngcnt.Location = new Point(667, 118);
-            lb_ngcnt.Name = "lb_ngcnt";
-            lb_ngcnt.Size = new Size(160, 296);
-            lb_ngcnt.TabIndex = 6;
-            lb_ngcnt.Text = "0";
-            lb_ngcnt.TextAlign = ContentAlignment.MiddleCenter;
+            lb_checkcnt_b.AutoSize = true;
+            lb_checkcnt_b.BackColor = Color.Transparent;
+            lb_checkcnt_b.BorderStyle = BorderStyle.FixedSingle;
+            lb_checkcnt_b.Dock = DockStyle.Fill;
+            lb_checkcnt_b.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_checkcnt_b.ForeColor = Color.Black;
+            lb_checkcnt_b.Location = new Point(3, 95);
+            lb_checkcnt_b.Name = "lb_checkcnt_b";
+            lb_checkcnt_b.Size = new Size(155, 239);
+            lb_checkcnt_b.TabIndex = 8;
+            lb_checkcnt_b.Text = "0";
+            lb_checkcnt_b.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lb_yellowcnt
             // 
@@ -223,27 +238,42 @@
             lb_yellowcnt.Dock = DockStyle.Fill;
             lb_yellowcnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
             lb_yellowcnt.ForeColor = Color.Yellow;
-            lb_yellowcnt.Location = new Point(501, 118);
+            lb_yellowcnt.Location = new Point(486, 95);
             lb_yellowcnt.Name = "lb_yellowcnt";
-            lb_yellowcnt.Size = new Size(160, 296);
-            lb_yellowcnt.TabIndex = 5;
+            lb_yellowcnt.Size = new Size(155, 239);
+            lb_yellowcnt.TabIndex = 7;
             lb_yellowcnt.Text = "0";
             lb_yellowcnt.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lb_ng
+            // lb_greencnt
             // 
-            lb_ng.AutoSize = true;
-            lb_ng.BackColor = Color.DarkGray;
-            lb_ng.BorderStyle = BorderStyle.FixedSingle;
-            lb_ng.Dock = DockStyle.Fill;
-            lb_ng.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lb_ng.ForeColor = Color.Purple;
-            lb_ng.Location = new Point(667, 0);
-            lb_ng.Name = "lb_ng";
-            lb_ng.Size = new Size(160, 118);
-            lb_ng.TabIndex = 4;
-            lb_ng.Text = "불량";
-            lb_ng.TextAlign = ContentAlignment.MiddleCenter;
+            lb_greencnt.AutoSize = true;
+            lb_greencnt.BackColor = Color.Transparent;
+            lb_greencnt.BorderStyle = BorderStyle.FixedSingle;
+            lb_greencnt.Dock = DockStyle.Fill;
+            lb_greencnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_greencnt.ForeColor = Color.Green;
+            lb_greencnt.Location = new Point(325, 95);
+            lb_greencnt.Name = "lb_greencnt";
+            lb_greencnt.Size = new Size(155, 239);
+            lb_greencnt.TabIndex = 5;
+            lb_greencnt.Text = "0";
+            lb_greencnt.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lb_ng_b
+            // 
+            lb_ng_b.AutoSize = true;
+            lb_ng_b.BackColor = Color.DarkGray;
+            lb_ng_b.BorderStyle = BorderStyle.FixedSingle;
+            lb_ng_b.Dock = DockStyle.Fill;
+            lb_ng_b.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_ng_b.ForeColor = Color.Purple;
+            lb_ng_b.Location = new Point(647, 0);
+            lb_ng_b.Name = "lb_ng_b";
+            lb_ng_b.Size = new Size(156, 95);
+            lb_ng_b.TabIndex = 4;
+            lb_ng_b.Text = "불량";
+            lb_ng_b.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lb_yellow
             // 
@@ -253,9 +283,9 @@
             lb_yellow.Dock = DockStyle.Fill;
             lb_yellow.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
             lb_yellow.ForeColor = Color.Yellow;
-            lb_yellow.Location = new Point(501, 0);
+            lb_yellow.Location = new Point(486, 0);
             lb_yellow.Name = "lb_yellow";
-            lb_yellow.Size = new Size(160, 118);
+            lb_yellow.Size = new Size(155, 95);
             lb_yellow.TabIndex = 3;
             lb_yellow.Text = "노랑";
             lb_yellow.TextAlign = ContentAlignment.MiddleCenter;
@@ -268,9 +298,9 @@
             lb_green.Dock = DockStyle.Fill;
             lb_green.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
             lb_green.ForeColor = Color.Green;
-            lb_green.Location = new Point(335, 0);
+            lb_green.Location = new Point(325, 0);
             lb_green.Name = "lb_green";
-            lb_green.Size = new Size(160, 118);
+            lb_green.Size = new Size(155, 95);
             lb_green.TabIndex = 2;
             lb_green.Text = "초록";
             lb_green.TextAlign = ContentAlignment.MiddleCenter;
@@ -283,59 +313,360 @@
             lb_red.Dock = DockStyle.Fill;
             lb_red.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
             lb_red.ForeColor = Color.Red;
-            lb_red.Location = new Point(169, 0);
+            lb_red.Location = new Point(164, 0);
             lb_red.Name = "lb_red";
-            lb_red.Size = new Size(160, 118);
+            lb_red.Size = new Size(155, 95);
             lb_red.TabIndex = 1;
             lb_red.Text = "빨강";
             lb_red.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lb_check
+            // lb_check_b
             // 
-            lb_check.AutoSize = true;
-            lb_check.BackColor = Color.DarkGray;
-            lb_check.BorderStyle = BorderStyle.FixedSingle;
-            lb_check.Dock = DockStyle.Fill;
-            lb_check.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lb_check.Location = new Point(3, 0);
-            lb_check.Name = "lb_check";
-            lb_check.Size = new Size(160, 118);
-            lb_check.TabIndex = 0;
-            lb_check.Text = "검사 수";
-            lb_check.TextAlign = ContentAlignment.MiddleCenter;
+            lb_check_b.AutoSize = true;
+            lb_check_b.BackColor = Color.DarkGray;
+            lb_check_b.BorderStyle = BorderStyle.FixedSingle;
+            lb_check_b.Dock = DockStyle.Fill;
+            lb_check_b.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_check_b.Location = new Point(3, 0);
+            lb_check_b.Name = "lb_check_b";
+            lb_check_b.Size = new Size(155, 95);
+            lb_check_b.TabIndex = 0;
+            lb_check_b.Text = "검사 수";
+            lb_check_b.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // page_milk
             // 
+            page_milk.Controls.Add(tableLayoutPanel2);
             page_milk.Location = new Point(4, 24);
             page_milk.Name = "page_milk";
             page_milk.Padding = new Padding(3);
-            page_milk.Size = new Size(842, 420);
+            page_milk.Size = new Size(802, 332);
             page_milk.TabIndex = 1;
             page_milk.Text = "우유";
             page_milk.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 3;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel2.Controls.Add(lb_checkcnt_m, 0, 1);
+            tableLayoutPanel2.Controls.Add(lb_ngcnt_m, 2, 1);
+            tableLayoutPanel2.Controls.Add(lb_okcnt, 1, 1);
+            tableLayoutPanel2.Controls.Add(lb_ng_m, 2, 0);
+            tableLayoutPanel2.Controls.Add(lb_ok, 1, 0);
+            tableLayoutPanel2.Controls.Add(lb_check_m, 0, 0);
+            tableLayoutPanel2.Location = new Point(-4, 0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 28.5714283F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 71.42857F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(806, 336);
+            tableLayoutPanel2.TabIndex = 0;
+            // 
+            // lb_checkcnt_m
+            // 
+            lb_checkcnt_m.AutoSize = true;
+            lb_checkcnt_m.BackColor = Color.Transparent;
+            lb_checkcnt_m.BorderStyle = BorderStyle.FixedSingle;
+            lb_checkcnt_m.Dock = DockStyle.Fill;
+            lb_checkcnt_m.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_checkcnt_m.ForeColor = Color.Black;
+            lb_checkcnt_m.Location = new Point(3, 96);
+            lb_checkcnt_m.Name = "lb_checkcnt_m";
+            lb_checkcnt_m.Size = new Size(262, 240);
+            lb_checkcnt_m.TabIndex = 15;
+            lb_checkcnt_m.Text = "0";
+            lb_checkcnt_m.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lb_ngcnt_m
+            // 
+            lb_ngcnt_m.AutoSize = true;
+            lb_ngcnt_m.BackColor = Color.Transparent;
+            lb_ngcnt_m.BorderStyle = BorderStyle.FixedSingle;
+            lb_ngcnt_m.Dock = DockStyle.Fill;
+            lb_ngcnt_m.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_ngcnt_m.ForeColor = Color.Red;
+            lb_ngcnt_m.Location = new Point(539, 96);
+            lb_ngcnt_m.Name = "lb_ngcnt_m";
+            lb_ngcnt_m.Size = new Size(264, 240);
+            lb_ngcnt_m.TabIndex = 14;
+            lb_ngcnt_m.Text = "0";
+            lb_ngcnt_m.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lb_okcnt
+            // 
+            lb_okcnt.AutoSize = true;
+            lb_okcnt.BackColor = Color.Transparent;
+            lb_okcnt.BorderStyle = BorderStyle.FixedSingle;
+            lb_okcnt.Dock = DockStyle.Fill;
+            lb_okcnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_okcnt.ForeColor = Color.Green;
+            lb_okcnt.Location = new Point(271, 96);
+            lb_okcnt.Name = "lb_okcnt";
+            lb_okcnt.Size = new Size(262, 240);
+            lb_okcnt.TabIndex = 13;
+            lb_okcnt.Text = "0";
+            lb_okcnt.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lb_ng_m
+            // 
+            lb_ng_m.AutoSize = true;
+            lb_ng_m.BackColor = Color.DarkGray;
+            lb_ng_m.BorderStyle = BorderStyle.FixedSingle;
+            lb_ng_m.Dock = DockStyle.Fill;
+            lb_ng_m.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_ng_m.ForeColor = Color.Red;
+            lb_ng_m.Location = new Point(539, 0);
+            lb_ng_m.Name = "lb_ng_m";
+            lb_ng_m.Size = new Size(264, 96);
+            lb_ng_m.TabIndex = 12;
+            lb_ng_m.Text = "불량 수";
+            lb_ng_m.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lb_ok
+            // 
+            lb_ok.AutoSize = true;
+            lb_ok.BackColor = Color.DarkGray;
+            lb_ok.BorderStyle = BorderStyle.FixedSingle;
+            lb_ok.Dock = DockStyle.Fill;
+            lb_ok.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_ok.ForeColor = Color.Green;
+            lb_ok.Location = new Point(271, 0);
+            lb_ok.Name = "lb_ok";
+            lb_ok.Size = new Size(262, 96);
+            lb_ok.TabIndex = 11;
+            lb_ok.Text = "양품 수";
+            lb_ok.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lb_check_m
+            // 
+            lb_check_m.AutoSize = true;
+            lb_check_m.BackColor = Color.DarkGray;
+            lb_check_m.BorderStyle = BorderStyle.FixedSingle;
+            lb_check_m.Dock = DockStyle.Fill;
+            lb_check_m.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_check_m.Location = new Point(3, 0);
+            lb_check_m.Name = "lb_check_m";
+            lb_check_m.Size = new Size(262, 96);
+            lb_check_m.TabIndex = 1;
+            lb_check_m.Text = "검사 수";
+            lb_check_m.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // pnl_cam
             // 
             pnl_cam.Location = new Point(10, 10);
             pnl_cam.Name = "pnl_cam";
-            pnl_cam.Size = new Size(600, 450);
+            pnl_cam.Size = new Size(640, 360);
             pnl_cam.TabIndex = 6;
             // 
             // group_info
             // 
+            group_info.Controls.Add(cb_status);
+            group_info.Controls.Add(lb_searchst);
+            group_info.Controls.Add(btn_adapt);
+            group_info.Controls.Add(lb_end);
+            group_info.Controls.Add(dt_end);
+            group_info.Controls.Add(lb_start);
+            group_info.Controls.Add(dt_start);
+            group_info.Controls.Add(btn_load);
+            group_info.Controls.Add(btn_del);
+            group_info.Controls.Add(btn_modify);
+            group_info.Controls.Add(tb_date);
+            group_info.Controls.Add(tb_status);
+            group_info.Controls.Add(tb_cou);
+            group_info.Controls.Add(tb_url);
+            group_info.Controls.Add(tb_id);
+            group_info.Controls.Add(lb_status);
+            group_info.Controls.Add(lb_cou);
+            group_info.Controls.Add(lb_url);
+            group_info.Controls.Add(lb_date);
+            group_info.Controls.Add(lb_id);
             group_info.Controls.Add(cmb_obj);
             group_info.Controls.Add(pb_search);
-            group_info.Location = new Point(10, 466);
+            group_info.Location = new Point(10, 374);
             group_info.Name = "group_info";
-            group_info.Size = new Size(997, 483);
+            group_info.Size = new Size(997, 575);
             group_info.TabIndex = 7;
             group_info.TabStop = false;
+            // 
+            // cb_status
+            // 
+            cb_status.FormattingEnabled = true;
+            cb_status.Items.AddRange(new object[] { "ALL", "OK", "NG" });
+            cb_status.Location = new Point(782, 144);
+            cb_status.Name = "cb_status";
+            cb_status.Size = new Size(121, 23);
+            cb_status.TabIndex = 24;
+            // 
+            // lb_searchst
+            // 
+            lb_searchst.AutoSize = true;
+            lb_searchst.Location = new Point(782, 126);
+            lb_searchst.Name = "lb_searchst";
+            lb_searchst.Size = new Size(49, 15);
+            lb_searchst.TabIndex = 23;
+            lb_searchst.Text = "STATUS";
+            // 
+            // btn_adapt
+            // 
+            btn_adapt.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_adapt.Location = new Point(782, 181);
+            btn_adapt.Name = "btn_adapt";
+            btn_adapt.Size = new Size(110, 40);
+            btn_adapt.TabIndex = 22;
+            btn_adapt.Text = "ADAPT";
+            btn_adapt.UseVisualStyleBackColor = true;
+            // 
+            // lb_end
+            // 
+            lb_end.AutoSize = true;
+            lb_end.Location = new Point(782, 76);
+            lb_end.Name = "lb_end";
+            lb_end.Size = new Size(31, 15);
+            lb_end.TabIndex = 21;
+            lb_end.Text = "END";
+            // 
+            // dt_end
+            // 
+            dt_end.Location = new Point(782, 94);
+            dt_end.Name = "dt_end";
+            dt_end.Size = new Size(200, 23);
+            dt_end.TabIndex = 20;
+            // 
+            // lb_start
+            // 
+            lb_start.AutoSize = true;
+            lb_start.Location = new Point(782, 27);
+            lb_start.Name = "lb_start";
+            lb_start.Size = new Size(41, 15);
+            lb_start.TabIndex = 19;
+            lb_start.Text = "START";
+            // 
+            // dt_start
+            // 
+            dt_start.Location = new Point(782, 45);
+            dt_start.Name = "dt_start";
+            dt_start.Size = new Size(200, 23);
+            dt_start.TabIndex = 18;
+            // 
+            // btn_load
+            // 
+            btn_load.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_load.Location = new Point(656, 176);
+            btn_load.Name = "btn_load";
+            btn_load.Size = new Size(110, 50);
+            btn_load.TabIndex = 17;
+            btn_load.Text = "DOWNLOAD";
+            btn_load.UseVisualStyleBackColor = true;
+            // 
+            // btn_del
+            // 
+            btn_del.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_del.Location = new Point(656, 115);
+            btn_del.Name = "btn_del";
+            btn_del.Size = new Size(110, 50);
+            btn_del.TabIndex = 16;
+            btn_del.Text = "DELETE";
+            btn_del.UseVisualStyleBackColor = true;
+            // 
+            // btn_modify
+            // 
+            btn_modify.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_modify.Location = new Point(656, 54);
+            btn_modify.Name = "btn_modify";
+            btn_modify.Size = new Size(110, 50);
+            btn_modify.TabIndex = 8;
+            btn_modify.Text = "MODIFY";
+            btn_modify.UseVisualStyleBackColor = true;
+            // 
+            // tb_date
+            // 
+            tb_date.Location = new Point(265, 224);
+            tb_date.Name = "tb_date";
+            tb_date.Size = new Size(375, 23);
+            tb_date.TabIndex = 15;
+            // 
+            // tb_status
+            // 
+            tb_status.Location = new Point(265, 176);
+            tb_status.Name = "tb_status";
+            tb_status.Size = new Size(375, 23);
+            tb_status.TabIndex = 14;
+            // 
+            // tb_cou
+            // 
+            tb_cou.Location = new Point(265, 129);
+            tb_cou.Name = "tb_cou";
+            tb_cou.Size = new Size(375, 23);
+            tb_cou.TabIndex = 13;
+            // 
+            // tb_url
+            // 
+            tb_url.Location = new Point(265, 82);
+            tb_url.Name = "tb_url";
+            tb_url.Size = new Size(375, 23);
+            tb_url.TabIndex = 12;
+            // 
+            // tb_id
+            // 
+            tb_id.Location = new Point(265, 33);
+            tb_id.Name = "tb_id";
+            tb_id.Size = new Size(375, 23);
+            tb_id.TabIndex = 11;
+            // 
+            // lb_status
+            // 
+            lb_status.AutoSize = true;
+            lb_status.Location = new Point(265, 158);
+            lb_status.Name = "lb_status";
+            lb_status.Size = new Size(49, 15);
+            lb_status.TabIndex = 9;
+            lb_status.Text = "STATUS";
+            // 
+            // lb_cou
+            // 
+            lb_cou.AutoSize = true;
+            lb_cou.Location = new Point(265, 111);
+            lb_cou.Name = "lb_cou";
+            lb_cou.Size = new Size(118, 15);
+            lb_cou.TabIndex = 8;
+            lb_cou.Text = "COLOR OR 유통기한";
+            // 
+            // lb_url
+            // 
+            lb_url.AutoSize = true;
+            lb_url.Location = new Point(265, 64);
+            lb_url.Name = "lb_url";
+            lb_url.Size = new Size(28, 15);
+            lb_url.TabIndex = 7;
+            lb_url.Text = "URL";
+            // 
+            // lb_date
+            // 
+            lb_date.AutoSize = true;
+            lb_date.Location = new Point(265, 206);
+            lb_date.Name = "lb_date";
+            lb_date.Size = new Size(36, 15);
+            lb_date.TabIndex = 6;
+            lb_date.Text = "DATE";
+            // 
+            // lb_id
+            // 
+            lb_id.AutoSize = true;
+            lb_id.Location = new Point(265, 15);
+            lb_id.Name = "lb_id";
+            lb_id.Size = new Size(19, 15);
+            lb_id.TabIndex = 5;
+            lb_id.Text = "ID";
             // 
             // pb_search
             // 
             pb_search.Location = new Point(6, 15);
             pb_search.Name = "pb_search";
-            pb_search.Size = new Size(250, 250);
+            pb_search.Size = new Size(250, 230);
             pb_search.TabIndex = 4;
             pb_search.TabStop = false;
             // 
@@ -352,15 +683,15 @@
             group_trans.Controls.Add(lb_port);
             group_trans.Controls.Add(lb_server);
             group_trans.Controls.Add(cmb_trans);
-            group_trans.Location = new Point(1013, 466);
+            group_trans.Location = new Point(1013, 374);
             group_trans.Name = "group_trans";
-            group_trans.Size = new Size(659, 483);
+            group_trans.Size = new Size(659, 575);
             group_trans.TabIndex = 0;
             group_trans.TabStop = false;
             // 
             // btn_logdel
             // 
-            btn_logdel.Location = new Point(569, 19);
+            btn_logdel.Location = new Point(507, 19);
             btn_logdel.Name = "btn_logdel";
             btn_logdel.Size = new Size(84, 25);
             btn_logdel.TabIndex = 14;
@@ -369,9 +700,9 @@
             // 
             // pb_sv
             // 
-            pb_sv.Location = new Point(433, 53);
+            pb_sv.Location = new Point(371, 53);
             pb_sv.Name = "pb_sv";
-            pb_sv.Size = new Size(30, 30);
+            pb_sv.Size = new Size(50, 50);
             pb_sv.TabIndex = 13;
             pb_sv.TabStop = false;
             // 
@@ -379,14 +710,14 @@
             // 
             pb_hw.Location = new Point(127, 53);
             pb_hw.Name = "pb_hw";
-            pb_hw.Size = new Size(30, 30);
+            pb_hw.Size = new Size(50, 50);
             pb_hw.TabIndex = 0;
             pb_hw.TabStop = false;
             // 
             // lb_svstatus
             // 
             lb_svstatus.AutoSize = true;
-            lb_svstatus.Location = new Point(340, 60);
+            lb_svstatus.Location = new Point(278, 68);
             lb_svstatus.Name = "lb_svstatus";
             lb_svstatus.Size = new Size(87, 15);
             lb_svstatus.TabIndex = 12;
@@ -395,7 +726,7 @@
             // lb_hwstatus
             // 
             lb_hwstatus.AutoSize = true;
-            lb_hwstatus.Location = new Point(10, 60);
+            lb_hwstatus.Location = new Point(10, 68);
             lb_hwstatus.Name = "lb_hwstatus";
             lb_hwstatus.Size = new Size(111, 15);
             lb_hwstatus.TabIndex = 11;
@@ -410,7 +741,7 @@
             // 
             // btn_connect
             // 
-            btn_connect.Location = new Point(486, 19);
+            btn_connect.Location = new Point(424, 19);
             btn_connect.Name = "btn_connect";
             btn_connect.Size = new Size(75, 25);
             btn_connect.TabIndex = 0;
@@ -419,7 +750,7 @@
             // 
             // tb_port
             // 
-            tb_port.Location = new Point(382, 19);
+            tb_port.Location = new Point(320, 19);
             tb_port.Name = "tb_port";
             tb_port.Size = new Size(81, 23);
             tb_port.TabIndex = 9;
@@ -427,7 +758,7 @@
             // lb_port
             // 
             lb_port.AutoSize = true;
-            lb_port.Location = new Point(340, 22);
+            lb_port.Location = new Point(278, 22);
             lb_port.Name = "lb_port";
             lb_port.Size = new Size(36, 15);
             lb_port.TabIndex = 7;
@@ -446,9 +777,9 @@
             // 
             cmb_trans.DropDownStyle = ComboBoxStyle.Simple;
             cmb_trans.FormattingEnabled = true;
-            cmb_trans.Location = new Point(10, 88);
+            cmb_trans.Location = new Point(10, 118);
             cmb_trans.Name = "cmb_trans";
-            cmb_trans.Size = new Size(643, 389);
+            cmb_trans.Size = new Size(643, 449);
             cmb_trans.TabIndex = 5;
             // 
             // Main
@@ -470,7 +801,11 @@
             page_box.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
+            page_milk.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             group_info.ResumeLayout(false);
+            group_info.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pb_search).EndInit();
             group_trans.ResumeLayout(false);
             group_trans.PerformLayout();
@@ -504,15 +839,42 @@
         private PictureBox pb_hw;
         private Label lb_svstatus;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label lb_yellowcnt;
-        private Label lb_ng;
+        private Label lb_greencnt;
+        private Label lb_ng_b;
         private Label lb_yellow;
         private Label lb_green;
         private Label lb_red;
-        private Label lb_check;
-        private Label lb_checkcnt;
-        private Label lb_greencnt;
+        private Label lb_check_b;
         private Label lb_redcnt;
-        private Label lb_ngcnt;
+        private Label lb_checkcnt_b;
+        private Label lb_yellowcnt;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Label lb_okcnt;
+        private Label lb_ng_m;
+        private Label lb_ok;
+        private Label lb_check_m;
+        private Label lb_ngcnt_m;
+        private TextBox tb_date;
+        private TextBox tb_status;
+        private TextBox tb_cou;
+        private TextBox tb_url;
+        private TextBox tb_id;
+        private Label lb_status;
+        private Label lb_cou;
+        private Label lb_url;
+        private Label lb_date;
+        private Label lb_id;
+        private Button btn_load;
+        private Button btn_del;
+        private Button btn_modify;
+        private Label lb_ngcnt_b;
+        private Label lb_checkcnt_m;
+        private DateTimePicker dt_start;
+        private ComboBox cb_status;
+        private Label lb_searchst;
+        private Button btn_adapt;
+        private Label lb_end;
+        private DateTimePicker dt_end;
+        private Label lb_start;
     }
 }
