@@ -76,6 +76,11 @@
             lb_id = new Label();
             pb_search = new PictureBox();
             group_trans = new GroupBox();
+            dgv_trans = new DataGridView();
+            trans_num = new DataGridViewTextBoxColumn();
+            trans_trans = new DataGridViewTextBoxColumn();
+            trans_log = new DataGridViewTextBoxColumn();
+            trans_time = new DataGridViewTextBoxColumn();
             btn_logdel = new Button();
             pb_sv = new PictureBox();
             pb_hw = new PictureBox();
@@ -86,7 +91,6 @@
             tb_port = new TextBox();
             lb_port = new Label();
             lb_server = new Label();
-            cmb_trans = new ComboBox();
             pb_cam = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pb_histo).BeginInit();
             tab_things.SuspendLayout();
@@ -97,6 +101,7 @@
             group_info.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_search).BeginInit();
             group_trans.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_trans).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_sv).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_hw).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_cam).BeginInit();
@@ -557,6 +562,7 @@
             btn_load.TabIndex = 17;
             btn_load.Text = "DOWNLOAD";
             btn_load.UseVisualStyleBackColor = true;
+            btn_load.Click += btn_load_Click;
             // 
             // btn_del
             // 
@@ -577,6 +583,7 @@
             btn_modify.TabIndex = 8;
             btn_modify.Text = "MODIFY";
             btn_modify.UseVisualStyleBackColor = true;
+            btn_modify.Click += btn_modify_Click;
             // 
             // tb_date
             // 
@@ -668,6 +675,7 @@
             // 
             // group_trans
             // 
+            group_trans.Controls.Add(dgv_trans);
             group_trans.Controls.Add(btn_logdel);
             group_trans.Controls.Add(pb_sv);
             group_trans.Controls.Add(pb_hw);
@@ -678,12 +686,51 @@
             group_trans.Controls.Add(tb_port);
             group_trans.Controls.Add(lb_port);
             group_trans.Controls.Add(lb_server);
-            group_trans.Controls.Add(cmb_trans);
             group_trans.Location = new Point(1013, 374);
             group_trans.Name = "group_trans";
             group_trans.Size = new Size(659, 575);
             group_trans.TabIndex = 0;
             group_trans.TabStop = false;
+            // 
+            // dgv_trans
+            // 
+            dgv_trans.BackgroundColor = Color.White;
+            dgv_trans.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_trans.Columns.AddRange(new DataGridViewColumn[] { trans_num, trans_trans, trans_log, trans_time });
+            dgv_trans.GridColor = Color.White;
+            dgv_trans.Location = new Point(10, 118);
+            dgv_trans.Name = "dgv_trans";
+            dgv_trans.RowHeadersVisible = false;
+            dgv_trans.RowTemplate.Height = 25;
+            dgv_trans.Size = new Size(643, 449);
+            dgv_trans.TabIndex = 15;
+            // 
+            // trans_num
+            // 
+            trans_num.FillWeight = 179.0494F;
+            trans_num.HeaderText = "번호";
+            trans_num.Name = "trans_num";
+            trans_num.Width = 80;
+            // 
+            // trans_trans
+            // 
+            trans_trans.FillWeight = 203.045685F;
+            trans_trans.HeaderText = "송수신";
+            trans_trans.Name = "trans_trans";
+            // 
+            // trans_log
+            // 
+            trans_log.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            trans_log.FillWeight = 8.952467F;
+            trans_log.HeaderText = "로그";
+            trans_log.Name = "trans_log";
+            // 
+            // trans_time
+            // 
+            trans_time.FillWeight = 8.952467F;
+            trans_time.HeaderText = "시간";
+            trans_time.Name = "trans_time";
+            trans_time.Width = 120;
             // 
             // btn_logdel
             // 
@@ -693,9 +740,11 @@
             btn_logdel.TabIndex = 14;
             btn_logdel.Text = "로그 지우기";
             btn_logdel.UseVisualStyleBackColor = true;
+            btn_logdel.Click += btn_logdel_Click;
             // 
             // pb_sv
             // 
+            pb_sv.BackColor = Color.Red;
             pb_sv.Location = new Point(371, 53);
             pb_sv.Name = "pb_sv";
             pb_sv.Size = new Size(50, 50);
@@ -704,6 +753,7 @@
             // 
             // pb_hw
             // 
+            pb_hw.BackColor = Color.Red;
             pb_hw.Location = new Point(127, 53);
             pb_hw.Name = "pb_hw";
             pb_hw.Size = new Size(50, 50);
@@ -732,7 +782,7 @@
             // 
             tb_server.Location = new Point(61, 19);
             tb_server.Name = "tb_server";
-            tb_server.Size = new Size(168, 23);
+            tb_server.Size = new Size(155, 23);
             tb_server.TabIndex = 10;
             // 
             // btn_connect
@@ -743,6 +793,7 @@
             btn_connect.TabIndex = 0;
             btn_connect.Text = "연 결";
             btn_connect.UseVisualStyleBackColor = true;
+            btn_connect.Click += btn_connect_Click;
             // 
             // tb_port
             // 
@@ -768,15 +819,6 @@
             lb_server.Size = new Size(45, 15);
             lb_server.TabIndex = 6;
             lb_server.Text = "서버 IP";
-            // 
-            // cmb_trans
-            // 
-            cmb_trans.DropDownStyle = ComboBoxStyle.Simple;
-            cmb_trans.FormattingEnabled = true;
-            cmb_trans.Location = new Point(10, 118);
-            cmb_trans.Name = "cmb_trans";
-            cmb_trans.Size = new Size(643, 449);
-            cmb_trans.TabIndex = 5;
             // 
             // pb_cam
             // 
@@ -813,6 +855,7 @@
             ((System.ComponentModel.ISupportInitialize)pb_search).EndInit();
             group_trans.ResumeLayout(false);
             group_trans.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_trans).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_sv).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_hw).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_cam).EndInit();
@@ -833,7 +876,6 @@
         private PictureBox pb_search;
         private Label lb_port;
         private Label lb_server;
-        private ComboBox cmb_trans;
         private Label lb_hwstatus;
         private TextBox tb_server;
         private Button btn_connect;
@@ -881,5 +923,10 @@
         private DateTimePicker dt_end;
         private Label lb_start;
         private PictureBox pb_cam;
+        private DataGridView dgv_trans;
+        private DataGridViewTextBoxColumn trans_num;
+        private DataGridViewTextBoxColumn trans_trans;
+        private DataGridViewTextBoxColumn trans_log;
+        private DataGridViewTextBoxColumn trans_time;
     }
 }

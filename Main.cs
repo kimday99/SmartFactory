@@ -4,7 +4,10 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Text;
 using System.Net.Http;
-
+using Amazon.S3;
+using Amazon;
+using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 
 namespace btnproject
 {
@@ -23,7 +26,13 @@ namespace btnproject
         // TCP Client 핸들러
         private TcpClientHandler tcpClientHandler;
 
+        private static readonly string bucketName = "your-bucket-name";
+        private static readonly string accessKey = "your-access-key";
+        private static readonly string secretKey = "your-secret-key";
+        private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USEast1; // 예: US East (N. Virginia)
+        private static IAmazonS3 s3Client;
 
+        private int trans_number = 1;
         public Main()
         {
             InitializeComponent();
@@ -34,9 +43,11 @@ namespace btnproject
             stop = false;
 
             // TCP Client 초기화 (IP 주소와 포트 번호를 라즈베리파이 서버에 맞게 설정)
-            tcpClientHandler = new TcpClientHandler("172.30.1.43", 65432);
-        }
+            //tcpClientHandler = new TcpClientHandler("172.30.1.43", 5050);
+            s3Client = new AmazonS3Client(accessKey, secretKey, bucketRegion);
 
+            //tcpClientHandler.MessageReceived += TcpClientHandler_MessageReceived; // 이벤트 핸들러 등록
+        }
 
         //START 클릭
         private async void btn_start_Click(object sender, EventArgs e)
@@ -44,18 +55,11 @@ namespace btnproject
             //카메라 꺼져있을시.
             if (!isCameraOn)
             {
-                // TCP 서버에 연결
-                try
+                tcpClientHandler.SendMessageAsync("start");
+                this.Invoke((Action)(() =>
                 {
-                    await tcpClientHandler.ConnectAsync();
-                    tcpClientHandler.SendMessageAsync("start");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
-                }
-
+                    dgv_trans.Rows.Add(trans_number++, "송신", "컨베이어 작동", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                }));
                 stop = false;
 
                 //이전에 카메라 작업이 존재한다면
@@ -168,6 +172,185 @@ namespace btnproject
                 }
             }
         }
+        ////첨부파일 업로드
+        //public void UploadToS3(string pBucketName, string pkey, string pFile)
+        //{
+        //    string pAccessKey = "";
+        //    string pSecretKey = "";
+        //    string pRegion = "";
+        //    try
+        //    {
+        //        //AWS 정보 셋팅
+        //        AmazonS3Config config = new AmazonS3Config();
+        //        config.RegionEndpoint = RegionEndpoint.GetBySystemName(pRegion);
+        //        AmazonS3Client s3Client = new AmazonS3Client(pAccessKey, pSecretKey, config);
+
+        //        var putRequest1 = new PutObjectRequest
+        //        {
+        //            BucketName = pBucketName,
+        //            Key = pkey,
+        //            FilePath = pFile
+        //        };
+        //        PutObjectResponse s3PutResponse = s3Client.PutObject(putRequest1);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //}
+
+
+        ////첨부파일 다운로드
+        //private void DownloadFromS3(string pBucketName, string pkey, string pFileDisplayName, bool pIsCache = false)
+        //{
+        //    string pAccessKey = "";
+        //    string pSecretKey = "";
+        //    string pRegion = "";
+
+        //    //AWS정보 셋팅
+        //    AmazonS3Config config = new AmazonS3Config();
+        //    config.RegionEndpoint = RegionEndpoint.GetBySystemName(pRegion);
+        //    AmazonS3Client s3Client = new AmazonS3Client(pAccessKey, pSecretKey, config);
+
+        //    //다운로드 받을 S3 객체 정보
+        //    GetObjectRequest oRequest = new GetObjectRequest();
+        //    oRequest.BucketName = pBucketName;
+        //    oRequest.Key = pkey;
+
+        //    GetObjectResponse oResponse = s3Client.GetObject(oRequest);
+
+
+        //}
+
+        // 이미지 업로드 
+        private async void UploadImageToS3(string filePath)
+        {
+            try
+            {
+                var fileTransferUtility = new TransferUtility(s3Client);
+
+                // 파일 업로드
+                await fileTransferUtility.UploadAsync(filePath, bucketName);
+                MessageBox.Show("Image uploaded successfully!");
+            }
+            catch (AmazonS3Exception e)
+            {
+                MessageBox.Show($"Error encountered on server. Message:'{e.Message}'");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Unknown error encountered. Message:'{e.Message}'");
+            }
+        }
+
+        private void btn_modify_Click(object sender, EventArgs e)
+        {
+            //UploadToS3("BackStorage", "/2024-08-13", "C:\\SmartFactory");
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    UploadImageToS3(filePath);
+                }
+            }
+        }
+
+        //이미지 다운로드
+        private async void DownloadImageFromS3(string keyName, string destinationPath)
+        {
+            try
+            {
+                var request = new GetObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = keyName
+                };
+
+                using (GetObjectResponse response = await s3Client.GetObjectAsync(request))
+                using (Stream responseStream = response.ResponseStream)
+                using (FileStream fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
+                {
+                    byte[] buffer = new byte[8192];
+                    int bytesRead;
+                    while ((bytesRead = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        fileStream.Write(buffer, 0, bytesRead);
+                    }
+                    MessageBox.Show("Image downloaded successfully!");
+                }
+            }
+            catch (AmazonS3Exception e)
+            {
+                MessageBox.Show($"Error encountered on server. Message:'{e.Message}'");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Unknown error encountered. Message:'{e.Message}'");
+            }
+        }
+
+
+        private void btn_load_Click(object sender, EventArgs e)
+        {
+            string keyName = "your-image-key"; // S3에서 이미지의 키
+            string destinationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "downloaded_image.jpg");
+            DownloadImageFromS3(keyName, destinationPath);
+        }
+
+        private async void btn_connect_Click(object sender, EventArgs e)
+        {
+            string serverip;
+            int serverport;
+            if (tb_server.Text == "" || tb_port.Text == "")
+            {
+                MessageBox.Show("서버IP, Port를 입력해주세요");
+            }
+            else
+            {
+                serverip = tb_server.Text;
+                serverport = int.Parse(tb_port.Text);
+                tcpClientHandler = new TcpClientHandler(serverip, serverport);
+
+                // TCP 서버에 연결
+                try
+                {
+                    await tcpClientHandler.ConnectAsync();
+                    //tcpClientHandler.SendMessageAsync("start");
+
+                    tcpClientHandler.MessageReceived += TcpClientHandler_MessageReceived; // 이벤트 핸들러 등록
+
+                    pb_hw.BackColor = Color.Green;
+                    pb_sv.BackColor = Color.Green;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    pb_hw.BackColor = Color.Red;
+                    pb_sv.BackColor = Color.Red;
+                    return;
+                }
+            }
+        }
+
+        private void btn_logdel_Click(object sender, EventArgs e)
+        {
+            dgv_trans.Rows.Clear();
+        }
+
+        private void TcpClientHandler_MessageReceived(string message)
+        {
+            
+            // 수신한 메시지를 DataGridView에 출력
+            this.Invoke((Action)(() =>
+            {
+                dgv_trans.Rows.Add(trans_number++,"수신", message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }));
+        }
+
 
     }
 }
+
