@@ -53,7 +53,6 @@
             lb_ng_m = new Label();
             lb_ok = new Label();
             lb_check_m = new Label();
-            pnl_cam = new Panel();
             group_info = new GroupBox();
             cb_status = new ComboBox();
             lb_searchst = new Label();
@@ -88,6 +87,7 @@
             lb_port = new Label();
             lb_server = new Label();
             cmb_trans = new ComboBox();
+            pb_cam = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pb_histo).BeginInit();
             tab_things.SuspendLayout();
             page_box.SuspendLayout();
@@ -99,6 +99,7 @@
             group_trans.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_sv).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_hw).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pb_cam).BeginInit();
             SuspendLayout();
             // 
             // btn_start
@@ -110,6 +111,7 @@
             btn_start.TabIndex = 0;
             btn_start.Text = "START";
             btn_start.UseVisualStyleBackColor = true;
+            btn_start.Click += btn_start_Click;
             // 
             // btn_stop
             // 
@@ -120,6 +122,7 @@
             btn_stop.TabIndex = 1;
             btn_stop.Text = "STOP";
             btn_stop.UseVisualStyleBackColor = true;
+            btn_stop.Click += btn_stop_Click;
             // 
             // pb_histo
             // 
@@ -455,13 +458,6 @@
             lb_check_m.Text = "검사 수";
             lb_check_m.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // pnl_cam
-            // 
-            pnl_cam.Location = new Point(10, 10);
-            pnl_cam.Name = "pnl_cam";
-            pnl_cam.Size = new Size(640, 360);
-            pnl_cam.TabIndex = 6;
-            // 
             // group_info
             // 
             group_info.Controls.Add(cb_status);
@@ -782,14 +778,22 @@
             cmb_trans.Size = new Size(643, 449);
             cmb_trans.TabIndex = 5;
             // 
+            // pb_cam
+            // 
+            pb_cam.Location = new Point(10, 8);
+            pb_cam.Name = "pb_cam";
+            pb_cam.Size = new Size(640, 360);
+            pb_cam.TabIndex = 0;
+            pb_cam.TabStop = false;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1684, 961);
+            Controls.Add(pb_cam);
             Controls.Add(group_trans);
             Controls.Add(group_info);
-            Controls.Add(pnl_cam);
             Controls.Add(tab_things);
             Controls.Add(pb_histo);
             Controls.Add(btn_stop);
@@ -811,6 +815,7 @@
             group_trans.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pb_sv).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_hw).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pb_cam).EndInit();
             ResumeLayout(false);
         }
 
@@ -823,7 +828,6 @@
         private TabControl tab_things;
         private TabPage page_box;
         private TabPage page_milk;
-        private Panel pnl_cam;
         private GroupBox group_info;
         private GroupBox group_trans;
         private PictureBox pb_search;
@@ -876,5 +880,6 @@
         private Label lb_end;
         private DateTimePicker dt_end;
         private Label lb_start;
+        private PictureBox pb_cam;
     }
 }
