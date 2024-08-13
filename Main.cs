@@ -43,7 +43,7 @@ namespace btnproject
             stop = false;
 
             // TCP Client 초기화 (IP 주소와 포트 번호를 라즈베리파이 서버에 맞게 설정)
-            
+
             s3Client = new AmazonS3Client(accessKey, secretKey, bucketRegion);
 
 
@@ -292,11 +292,11 @@ namespace btnproject
 
         private void TcpClientHandler_MessageReceived(string message)
         {
-            
+
             // 수신한 메시지를 DataGridView에 출력
             this.Invoke((Action)(() =>
             {
-                dgv_trans.Rows.Add(trans_number++,"수신", message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                dgv_trans.Rows.Add(trans_number++, "수신", message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             }));
         }
 

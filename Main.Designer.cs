@@ -54,16 +54,8 @@
             lb_ok = new Label();
             lb_check_m = new Label();
             group_info = new GroupBox();
-            cb_status = new ComboBox();
-            lb_searchst = new Label();
-            btn_adapt = new Button();
-            lb_end = new Label();
-            dt_end = new DateTimePicker();
-            lb_start = new Label();
-            dt_start = new DateTimePicker();
             btn_load = new Button();
             btn_del = new Button();
-            btn_modify = new Button();
             tb_date = new TextBox();
             tb_status = new TextBox();
             tb_cou = new TextBox();
@@ -465,16 +457,8 @@
             // 
             // group_info
             // 
-            group_info.Controls.Add(cb_status);
-            group_info.Controls.Add(lb_searchst);
-            group_info.Controls.Add(btn_adapt);
-            group_info.Controls.Add(lb_end);
-            group_info.Controls.Add(dt_end);
-            group_info.Controls.Add(lb_start);
-            group_info.Controls.Add(dt_start);
             group_info.Controls.Add(btn_load);
             group_info.Controls.Add(btn_del);
-            group_info.Controls.Add(btn_modify);
             group_info.Controls.Add(tb_date);
             group_info.Controls.Add(tb_status);
             group_info.Controls.Add(tb_cou);
@@ -493,70 +477,10 @@
             group_info.TabIndex = 7;
             group_info.TabStop = false;
             // 
-            // cb_status
-            // 
-            cb_status.FormattingEnabled = true;
-            cb_status.Items.AddRange(new object[] { "ALL", "OK", "NG" });
-            cb_status.Location = new Point(782, 144);
-            cb_status.Name = "cb_status";
-            cb_status.Size = new Size(121, 23);
-            cb_status.TabIndex = 24;
-            // 
-            // lb_searchst
-            // 
-            lb_searchst.AutoSize = true;
-            lb_searchst.Location = new Point(782, 126);
-            lb_searchst.Name = "lb_searchst";
-            lb_searchst.Size = new Size(49, 15);
-            lb_searchst.TabIndex = 23;
-            lb_searchst.Text = "STATUS";
-            // 
-            // btn_adapt
-            // 
-            btn_adapt.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_adapt.Location = new Point(782, 181);
-            btn_adapt.Name = "btn_adapt";
-            btn_adapt.Size = new Size(110, 40);
-            btn_adapt.TabIndex = 22;
-            btn_adapt.Text = "ADAPT";
-            btn_adapt.UseVisualStyleBackColor = true;
-            // 
-            // lb_end
-            // 
-            lb_end.AutoSize = true;
-            lb_end.Location = new Point(782, 76);
-            lb_end.Name = "lb_end";
-            lb_end.Size = new Size(31, 15);
-            lb_end.TabIndex = 21;
-            lb_end.Text = "END";
-            // 
-            // dt_end
-            // 
-            dt_end.Location = new Point(782, 94);
-            dt_end.Name = "dt_end";
-            dt_end.Size = new Size(200, 23);
-            dt_end.TabIndex = 20;
-            // 
-            // lb_start
-            // 
-            lb_start.AutoSize = true;
-            lb_start.Location = new Point(782, 27);
-            lb_start.Name = "lb_start";
-            lb_start.Size = new Size(41, 15);
-            lb_start.TabIndex = 19;
-            lb_start.Text = "START";
-            // 
-            // dt_start
-            // 
-            dt_start.Location = new Point(782, 45);
-            dt_start.Name = "dt_start";
-            dt_start.Size = new Size(200, 23);
-            dt_start.TabIndex = 18;
-            // 
             // btn_load
             // 
             btn_load.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_load.Location = new Point(656, 176);
+            btn_load.Location = new Point(772, 149);
             btn_load.Name = "btn_load";
             btn_load.Size = new Size(110, 50);
             btn_load.TabIndex = 17;
@@ -567,23 +491,12 @@
             // btn_del
             // 
             btn_del.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_del.Location = new Point(656, 115);
+            btn_del.Location = new Point(772, 64);
             btn_del.Name = "btn_del";
             btn_del.Size = new Size(110, 50);
             btn_del.TabIndex = 16;
             btn_del.Text = "DELETE";
             btn_del.UseVisualStyleBackColor = true;
-            // 
-            // btn_modify
-            // 
-            btn_modify.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_modify.Location = new Point(656, 54);
-            btn_modify.Name = "btn_modify";
-            btn_modify.Size = new Size(110, 50);
-            btn_modify.TabIndex = 8;
-            btn_modify.Text = "MODIFY";
-            btn_modify.UseVisualStyleBackColor = true;
-            btn_modify.Click += btn_modify_Click;
             // 
             // tb_date
             // 
@@ -912,16 +825,8 @@
         private Label lb_id;
         private Button btn_load;
         private Button btn_del;
-        private Button btn_modify;
         private Label lb_ngcnt_b;
         private Label lb_checkcnt_m;
-        private DateTimePicker dt_start;
-        private ComboBox cb_status;
-        private Label lb_searchst;
-        private Button btn_adapt;
-        private Label lb_end;
-        private DateTimePicker dt_end;
-        private Label lb_start;
         private PictureBox pb_cam;
         private DataGridView dgv_trans;
         private DataGridViewTextBoxColumn trans_num;
