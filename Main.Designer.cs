@@ -844,6 +844,7 @@
             Controls.Add(btn_start);
             Name = "Main";
             Text = "Form1";
+            Load += Main_Load;
             ((System.ComponentModel.ISupportInitialize)pb_histo).EndInit();
             tab_things.ResumeLayout(false);
             page_box.ResumeLayout(false);

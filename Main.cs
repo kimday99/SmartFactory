@@ -46,13 +46,13 @@ namespace btnproject
             stop = false;
 
             // TCP Client 초기화 (IP 주소와 포트 번호를 라즈베리파이 서버에 맞게 설정)
-            tcpClientHandler = new TcpClientHandler("172.30.1.43", 65432);
+            tcpClientHandler = new TcpClientHandler("", 12345);
 
             // AWS 클라이언트 초기화
             awsClient = new AwsClient();
 
             // DatabaseHandler 초기화 (MySQL 연결 정보 설정)
-            dbHandler = new DatabaseHandler("localhost", "my_database", "root", "1234");
+            dbHandler = new DatabaseHandler("", "", "", "");
 
             // DataGridView CellClick 이벤트 핸들러 등록
             dataGridView1.CellClick += dataGridView1_CellClick;
@@ -406,6 +406,11 @@ namespace btnproject
 
         //PC 와 하드웨어간 통신 연결
         private void btn_connect_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Main_Load(object sender, EventArgs e)
         {
 
         }
