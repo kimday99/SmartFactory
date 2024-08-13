@@ -43,10 +43,10 @@ namespace btnproject
             stop = false;
 
             // TCP Client 초기화 (IP 주소와 포트 번호를 라즈베리파이 서버에 맞게 설정)
-            //tcpClientHandler = new TcpClientHandler("172.30.1.43", 5050);
+            
             s3Client = new AmazonS3Client(accessKey, secretKey, bucketRegion);
 
-            //tcpClientHandler.MessageReceived += TcpClientHandler_MessageReceived; // 이벤트 핸들러 등록
+
         }
 
         //START 클릭
@@ -172,56 +172,6 @@ namespace btnproject
                 }
             }
         }
-        ////첨부파일 업로드
-        //public void UploadToS3(string pBucketName, string pkey, string pFile)
-        //{
-        //    string pAccessKey = "";
-        //    string pSecretKey = "";
-        //    string pRegion = "";
-        //    try
-        //    {
-        //        //AWS 정보 셋팅
-        //        AmazonS3Config config = new AmazonS3Config();
-        //        config.RegionEndpoint = RegionEndpoint.GetBySystemName(pRegion);
-        //        AmazonS3Client s3Client = new AmazonS3Client(pAccessKey, pSecretKey, config);
-
-        //        var putRequest1 = new PutObjectRequest
-        //        {
-        //            BucketName = pBucketName,
-        //            Key = pkey,
-        //            FilePath = pFile
-        //        };
-        //        PutObjectResponse s3PutResponse = s3Client.PutObject(putRequest1);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //    }
-        //}
-
-
-        ////첨부파일 다운로드
-        //private void DownloadFromS3(string pBucketName, string pkey, string pFileDisplayName, bool pIsCache = false)
-        //{
-        //    string pAccessKey = "";
-        //    string pSecretKey = "";
-        //    string pRegion = "";
-
-        //    //AWS정보 셋팅
-        //    AmazonS3Config config = new AmazonS3Config();
-        //    config.RegionEndpoint = RegionEndpoint.GetBySystemName(pRegion);
-        //    AmazonS3Client s3Client = new AmazonS3Client(pAccessKey, pSecretKey, config);
-
-        //    //다운로드 받을 S3 객체 정보
-        //    GetObjectRequest oRequest = new GetObjectRequest();
-        //    oRequest.BucketName = pBucketName;
-        //    oRequest.Key = pkey;
-
-        //    GetObjectResponse oResponse = s3Client.GetObject(oRequest);
-
-
-        //}
 
         // 이미지 업로드 
         private async void UploadImageToS3(string filePath)
