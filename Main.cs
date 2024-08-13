@@ -397,14 +397,58 @@ namespace btnproject
         }
 
         //PC 와 하드웨어간 통신 연결
-        private void btn_connect_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void Main_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private async void btn_connect_Click(object sender, EventArgs e)
+        {
+            string serverip;
+            int serverport;
+            if (tb_server.Text == "" || tb_port.Text == "")
+            {
+                MessageBox.Show("서버IP, Port를 입력해주세요");
+            }
+            else
+            {
+                serverip = tb_server.Text;
+                serverport = int.Parse(tb_port.Text);
+                tcpClientHandler = new TcpClientHandler(serverip, serverport);
+
+                // TCP 서버에 연결
+                try
+                {
+                    await tcpClientHandler.ConnectAsync();
+                    //tcpClientHandler.SendMessageAsync("start");
+
+                    tcpClientHandler.MessageReceived += TcpClientHandler_MessageReceived; // 이벤트 핸들러 등록
+
+                    pb_hw.BackColor = Color.Green;
+                    pb_sv.BackColor = Color.Green;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    pb_hw.BackColor = Color.Red;
+                    pb_sv.BackColor = Color.Red;
+                    return;
+                }
+            }
+        }   
+        private void btn_logdel_Click(object sender, EventArgs e)
+        {
+            dgv_trans.Rows.Clear();
+        }
+        private void TcpClientHandler_MessageReceived(string message)
+        {
+            //수신한 메시지를 DataGridView에 출력
+            this.Invoke((Action)(() =>
+            {
+                dgv_trans.Rows.Add(trans_number++, "수신", message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }));
         }
     }
 }
