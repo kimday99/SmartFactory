@@ -31,7 +31,6 @@
             btn_start = new Button();
             btn_stop = new Button();
             pb_histo = new PictureBox();
-            cmb_obj = new ComboBox();
             tab_things = new TabControl();
             page_box = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -54,6 +53,12 @@
             lb_ok = new Label();
             lb_check_m = new Label();
             group_info = new GroupBox();
+            dataGridView1 = new DataGridView();
+            dgv_id = new DataGridViewTextBoxColumn();
+            dgv_url = new DataGridViewLinkColumn();
+            dgv_color = new DataGridViewTextBoxColumn();
+            dgv_status = new DataGridViewTextBoxColumn();
+            dgv_date = new DataGridViewTextBoxColumn();
             btn_load = new Button();
             btn_del = new Button();
             tb_date = new TextBox();
@@ -91,6 +96,7 @@
             page_milk.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             group_info.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_search).BeginInit();
             group_trans.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_trans).BeginInit();
@@ -128,15 +134,6 @@
             pb_histo.Size = new Size(200, 200);
             pb_histo.TabIndex = 3;
             pb_histo.TabStop = false;
-            // 
-            // cmb_obj
-            // 
-            cmb_obj.DropDownStyle = ComboBoxStyle.Simple;
-            cmb_obj.FormattingEnabled = true;
-            cmb_obj.Location = new Point(6, 253);
-            cmb_obj.Name = "cmb_obj";
-            cmb_obj.Size = new Size(985, 318);
-            cmb_obj.TabIndex = 4;
             // 
             // tab_things
             // 
@@ -457,6 +454,7 @@
             // 
             // group_info
             // 
+            group_info.Controls.Add(dataGridView1);
             group_info.Controls.Add(btn_load);
             group_info.Controls.Add(btn_del);
             group_info.Controls.Add(tb_date);
@@ -469,13 +467,56 @@
             group_info.Controls.Add(lb_url);
             group_info.Controls.Add(lb_date);
             group_info.Controls.Add(lb_id);
-            group_info.Controls.Add(cmb_obj);
             group_info.Controls.Add(pb_search);
             group_info.Location = new Point(10, 374);
             group_info.Name = "group_info";
             group_info.Size = new Size(997, 575);
             group_info.TabIndex = 7;
             group_info.TabStop = false;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.BackgroundColor = Color.White;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { dgv_id, dgv_url, dgv_color, dgv_status, dgv_date });
+            dataGridView1.GridColor = Color.White;
+            dataGridView1.Location = new Point(0, 259);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(985, 316);
+            dataGridView1.TabIndex = 25;
+            dataGridView1.CellClick += dataGridView1_CellClick;
+            // 
+            // dgv_id
+            // 
+            dgv_id.HeaderText = "ID";
+            dgv_id.Name = "dgv_id";
+            dgv_id.Resizable = DataGridViewTriState.True;
+            // 
+            // dgv_url
+            // 
+            dgv_url.HeaderText = "URL";
+            dgv_url.Name = "dgv_url";
+            dgv_url.Resizable = DataGridViewTriState.True;
+            dgv_url.SortMode = DataGridViewColumnSortMode.Automatic;
+            dgv_url.Width = 300;
+            // 
+            // dgv_color
+            // 
+            dgv_color.HeaderText = "Color";
+            dgv_color.Name = "dgv_color";
+            // 
+            // dgv_status
+            // 
+            dgv_status.HeaderText = "Status";
+            dgv_status.Name = "dgv_status";
+            // 
+            // dgv_date
+            // 
+            dgv_date.HeaderText = "Date";
+            dgv_date.Name = "dgv_date";
+            dgv_date.Width = 400;
             // 
             // btn_load
             // 
@@ -497,6 +538,7 @@
             btn_del.TabIndex = 16;
             btn_del.Text = "DELETE";
             btn_del.UseVisualStyleBackColor = true;
+            btn_del.Click += btn_del_Click;
             // 
             // tb_date
             // 
@@ -547,9 +589,9 @@
             lb_cou.AutoSize = true;
             lb_cou.Location = new Point(265, 111);
             lb_cou.Name = "lb_cou";
-            lb_cou.Size = new Size(118, 15);
+            lb_cou.Size = new Size(46, 15);
             lb_cou.TabIndex = 8;
-            lb_cou.Text = "COLOR OR 유통기한";
+            lb_cou.Text = "COLOR";
             // 
             // lb_url
             // 
@@ -755,6 +797,7 @@
             Controls.Add(btn_start);
             Name = "Main";
             Text = "Form1";
+            Load += Main_Load;
             ((System.ComponentModel.ISupportInitialize)pb_histo).EndInit();
             tab_things.ResumeLayout(false);
             page_box.ResumeLayout(false);
@@ -765,6 +808,7 @@
             tableLayoutPanel2.PerformLayout();
             group_info.ResumeLayout(false);
             group_info.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_search).EndInit();
             group_trans.ResumeLayout(false);
             group_trans.PerformLayout();
@@ -780,7 +824,6 @@
         private Button btn_start;
         private Button btn_stop;
         private PictureBox pb_histo;
-        private ComboBox cmb_obj;
         private TabControl tab_things;
         private TabPage page_box;
         private TabPage page_milk;
@@ -828,6 +871,12 @@
         private Label lb_ngcnt_b;
         private Label lb_checkcnt_m;
         private PictureBox pb_cam;
+        private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn dgv_id;
+        private DataGridViewLinkColumn dgv_url;
+        private DataGridViewTextBoxColumn dgv_color;
+        private DataGridViewTextBoxColumn dgv_status;
+        private DataGridViewTextBoxColumn dgv_date;
         private DataGridView dgv_trans;
         private DataGridViewTextBoxColumn trans_num;
         private DataGridViewTextBoxColumn trans_trans;
