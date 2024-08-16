@@ -6,6 +6,7 @@ public class PhotoRecord
     public string DominantColor { get; set; }
     public string Status { get; set; }
     public DateTime DateTaken { get; set; }
+    public string Poor { get; set; }
 
     public override string ToString()
     {

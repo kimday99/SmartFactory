@@ -12,6 +12,7 @@ public class TcpClientHandler : IDisposable
     // 메시지 수신 이벤트 추가
     public event Action<string> MessageReceived;
 
+    //라즈베리파이 IP,PORT 번호 받는 곳.
     public TcpClientHandler(string ip, int port)
     {
         serverIp = ip;
@@ -19,18 +20,18 @@ public class TcpClientHandler : IDisposable
         tcpClient = new TcpClient();
     }
 
-    // 서버에 연결
+    //서버에 연결
     public async Task ConnectAsync()
     {
         if (tcpClient.Connected)
         {
+           
             return;  // 이미 연결된 상태라면 재연결하지 않음
         }
 
         try
-        {
-            await tcpClient.ConnectAsync(serverIp, serverPort);
-            
+        {        
+            await tcpClient.ConnectAsync(serverIp, serverPort);    
             // 서버에 연결되면 메시지 수신 시작
             _ = ReceiveMessagesAsync();
 
@@ -63,7 +64,7 @@ public class TcpClientHandler : IDisposable
         }
     }
 
-    // 메시지 수신 (비동기)
+    // 메시지 수신(비동기)
     private async Task ReceiveMessagesAsync()
     {
         try

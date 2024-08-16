@@ -6,6 +6,12 @@ using System.Text;
 using System.Net.Http;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Net.Mail;
+using System;
+using static System.Net.WebRequestMethods;
+using static OpenCvSharp.Stitcher;
+using Newtonsoft.Json;
+using IOFile = System.IO.File;
+
 
 namespace btnproject
 {
@@ -28,24 +34,26 @@ namespace btnproject
         private TcpClientHandler tcpClientHandler;
         // AWS 클라이언트 추가
         private AwsClient awsClient;
+
         //ID 
         private int photoSequenceNumber = 1;
 
         private HttpClient httpClient;
 
         private int trans_number = 1;
+
         public Main()
         {
             InitializeComponent();
             pb_cam.SizeMode = PictureBoxSizeMode.StretchImage;
             pb_histo.SizeMode = PictureBoxSizeMode.StretchImage;
             pb_search.SizeMode = PictureBoxSizeMode.StretchImage;
-            videoCapture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
+            videoCapture = new VideoCapture(2, VideoCaptureAPIs.DSHOW);
             isCameraOn = false;
             stop = false;
 
             // TCP Client 초기화 (IP 주소와 포트 번호를 라즈베리파이 서버에 맞게 설정)
-            tcpClientHandler = new TcpClientHandler("", 12345);
+            //tcpClientHandler = new TcpClientHandler("", 0);
 
             // AWS 클라이언트 초기화
             awsClient = new AwsClient();
@@ -58,7 +66,6 @@ namespace btnproject
 
             // HttpClient 초기화
             httpClient = new HttpClient();
-
         }
 
 
@@ -68,11 +75,7 @@ namespace btnproject
             //카메라 꺼져있을시.
             if (!isCameraOn)
             {
-                tcpClientHandler.SendMessageAsync("start");
-                this.Invoke((Action)(() =>
-                {
-                    dgv_trans.Rows.Add(trans_number++, "송신", "컨베이어 작동", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                }));
+                TcpClientHandler_SendMessage();
                 stop = false;
 
                 //이전에 카메라 작업이 존재한다면
@@ -93,6 +96,7 @@ namespace btnproject
                 //CameraCallback 메서드를 비동기적으로 실행하여 카메라 스트리밍을 처리합니다
                 task = Task.Run(() => CameraCallback());
                 isCameraOn = true;
+                tcpClientHandler.MessageReceived += TcpClientHandler_MessageReceived;
             }
         }
 
@@ -123,6 +127,7 @@ namespace btnproject
             tcpClientHandler.Disconnect();
         }
 
+        //웹캠 촬영 메서드
         private async Task CameraCallback()
         {
             mat = new Mat();
@@ -148,10 +153,11 @@ namespace btnproject
             mat.Release();
         }
 
-        //
+        //histogram rgb 구분
         private string AnalyzeColor(Mat image)
         {
-            //컨베이어 벨트 중지시
+            //지배 색깔
+            string dominantColor="";
             if (isCameraOn && !mat.Empty())
             {
                 Mat StopImage = mat.Clone();
@@ -162,7 +168,7 @@ namespace btnproject
                 double greenMean = mean.Val1;
                 double redMean = mean.Val2;
 
-                string dominantColor;
+
 
                 //히스토그램 rgb 구분 경계값 지정
                 double threshold = 17;
@@ -175,118 +181,31 @@ namespace btnproject
                 else if (greenMean > redMean + threshold && greenMean > blueMean + threshold)
                 {
                     dominantColor = "Green";
+                    pb_histo.BackColor=Color.Green;
                 }
                 else if (blueMean > redMean + threshold && blueMean > greenMean + threshold)
                 {
                     dominantColor = "Blue";
+                    pb_histo.BackColor = Color.Blue;
                 }
                 else
                 {
-                    dominantColor = "Nothing"; // Default case when no color is dominant
-                }
-                return dominantColor;
+                    dominantColor = "Unknown";
+                    pb_histo.BackColor = (Color)Color.Black;
+                }              
             }
-            return "Unknown";
+            return dominantColor; 
         }
 
-        //제거 클릭 인데 사진 찍혔을때 이벤트로 쓰는중.
+
         private async void btn_del_Click(object sender, EventArgs e)
         {
-            if (isCameraOn && videoCapture != null && videoCapture.IsOpened())
-            {
-                // 현재 프레임 캡처를 위한 새로운 Mat 객체
-                Mat captureMat = new Mat();
 
-                // 비동기적으로 카메라에서 이미지 캡처
-                Task captureTask = Task.Run(() =>
-                {
-                    videoCapture.Read(captureMat);
-                });
-
-                // 캡처 작업이 완료될 때까지 대기
-                await captureTask;
-
-                if (!captureMat.Empty())
-                {
-                    // 비트맵으로 변환
-                    var bitmap = BitmapConverter.ToBitmap(captureMat);
-
-                    // 로컬에 사진 저장
-                    string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                    string imagePath = $"{timestamp}.jpg";
-                    bitmap.Save(imagePath);
-
-                    // AWS S3에 사진 업로드
-                    await awsClient.UploadFileAsync(imagePath, imagePath);
-
-                    // S3 URL 가져오기
-                    string s3Url = awsClient.GetFileUrl(imagePath);
-
-                    // 색상 분석
-                    string dominantColor = AnalyzeColor(captureMat);
-
-                    // 상태(NG,OK)
-                    string status = "NG";
-
-                    //불량 내용
-                    string poor = "";
-
-                    // DataGridView에 데이터 추가
-                    var photoRecord = new PhotoRecord
-                    {
-                        SequenceNumber = photoSequenceNumber++,
-                        S3Url = s3Url,
-                        DominantColor = dominantColor,
-                        Status = status,
-                        DateTaken = DateTime.Now
-                    };
-
-                    // DataGridView에 새 행 추가
-                    dataGridView1.Rows.Add(
-                        photoRecord.SequenceNumber,
-                        photoRecord.S3Url,
-                        photoRecord.DominantColor,
-                        photoRecord.Status,
-                        photoRecord.DateTaken
-                    );
-
-                    // MySQL 데이터베이스 OBJECT 테이블 데이터 저장
-                    try
-                    {
-                        dbHandler.InsertObject(photoRecord.SequenceNumber, "객체명", photoRecord.S3Url, "type");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                        return;
-                    }
-
-                    // MYSQL 데이터베이스 OBJECTLOG 테이블 데이터 저장
-                    try
-                    {
-                        dbHandler.InsertObjectLog(photoRecord.SequenceNumber, status, poor, photoRecord.DateTaken, photoRecord.DominantColor);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                        return;
-                    }
-
-                    MessageBox.Show($"{imagePath} 가 업로드 되었습니다.");
-                }
-                else
-                {
-                    MessageBox.Show("카메라로부터 사진을 가져오지 못했습니다.");
-                }
-
-                captureMat.Release();
-            }
-            else
-            {
-                MessageBox.Show("카메라가 켜져 있지 않거나 초기화되지 않았습니다.");
-            }
         }
 
+
+
+        //데이터 그리드 뷰 셀 클릭
         private async void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // 행이 클릭된 경우만 처리
@@ -304,14 +223,7 @@ namespace btnproject
                 tb_status.Text = selectedRow.Cells["dgv_status"].Value?.ToString();
                 tb_date.Text = selectedRow.Cells["dgv_date"].Value?.ToString();
 
-
-                // URL이 비어있는 경우
-                if (string.IsNullOrEmpty(imageUrl))
-                {
-                    MessageBox.Show("URL이 비어 있습니다.");
-                    return;
-                }
-
+                //셀 클릭시 PICTURE BOX 에 URL 이미지 띄우기
                 try
                 {
                     // 이미지를 다운로드합니다.
@@ -332,12 +244,10 @@ namespace btnproject
                 {
                     MessageBox.Show($"이미지를 로드하는 중 오류가 발생했습니다: {ex.Message}");
                 }
-
-
             }
         }
 
-        //다운로드
+        //다운로드 버튼 이벤트
         private void btn_load_Click(object sender, EventArgs e)
         {
             // 파일 저장 대화상자 생성
@@ -357,6 +267,8 @@ namespace btnproject
             }
         }
 
+
+        //csv 다운로드 메서드
         private void SaveDataGridViewToCsv(DataGridView dataGridView, string filePath)
         {
             // CSV 파일 작성
@@ -391,23 +303,24 @@ namespace btnproject
                 }
                 csvContent.AppendLine();
             }
-
             // Write CSV to file
-            File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
+
+            IOFile.WriteAllText("path/to/file.txt", "Content");
         }
 
         //PC 와 하드웨어간 통신 연결
-
-
         private void Main_Load(object sender, EventArgs e)
         {
 
         }
 
+
+        //라즈베리파이 측으로 연결.
         private async void btn_connect_Click(object sender, EventArgs e)
         {
             string serverip;
             int serverport;
+
             if (tb_server.Text == "" || tb_port.Text == "")
             {
                 MessageBox.Show("서버IP, Port를 입력해주세요");
@@ -417,17 +330,15 @@ namespace btnproject
                 serverip = tb_server.Text;
                 serverport = int.Parse(tb_port.Text);
                 tcpClientHandler = new TcpClientHandler(serverip, serverport);
-
+                
                 // TCP 서버에 연결
                 try
                 {
+                  
                     await tcpClientHandler.ConnectAsync();
-                    //tcpClientHandler.SendMessageAsync("start");
-
-                    tcpClientHandler.MessageReceived += TcpClientHandler_MessageReceived; // 이벤트 핸들러 등록
-
                     pb_hw.BackColor = Color.Green;
                     pb_sv.BackColor = Color.Green;
+                    btn_start.Enabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -437,18 +348,143 @@ namespace btnproject
                     return;
                 }
             }
-        }   
+        }
+
+        //컨베이어 벨트 멈춤시?
         private void btn_logdel_Click(object sender, EventArgs e)
         {
-            dgv_trans.Rows.Clear();
+           
+            //dgv_trans.Rows.Clear();
         }
-        private void TcpClientHandler_MessageReceived(string message)
+
+        //하드웨어 송신
+        private void TcpClientHandler_SendMessage()
+        {
+            tcpClientHandler.SendMessageAsync("start");
+            this.Invoke((Action)(() =>
+            {
+                dgv_trans.Rows.Add(trans_number++, "송신", "컨베이어 작동", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }));
+        }
+
+
+        //하드웨어 메세지 수신
+        private async void TcpClientHandler_MessageReceived(string message)
         {
             //수신한 메시지를 DataGridView에 출력
             this.Invoke((Action)(() =>
             {
                 dgv_trans.Rows.Add(trans_number++, "수신", message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             }));
+            //컨베이어벨트 멈추고.
+            if (message == "picture")
+            {
+                await picture(); 
+            }
+        }
+
+        //사진찍고 Ec2에 이미지 전송
+        private async Task picture()
+        {
+            if (isCameraOn && videoCapture != null && videoCapture.IsOpened())
+            {
+                // 현재 프레임 캡처를 위한 새로운 Mat 객체
+                Mat captureMat = new Mat();
+
+                // 비동기적으로 카메라에서 이미지 캡처
+                Task captureTask = Task.Run(() =>
+                {
+                    videoCapture.Read(captureMat);
+                });
+
+                // 캡처 작업이 완료될 때까지 대기
+                await captureTask;
+
+
+                //사진 찍었을때
+                if (!captureMat.Empty())
+                {
+                    // 비트맵으로 변환
+                    var bitmap = BitmapConverter.ToBitmap(captureMat);
+
+                    // 로컬에 사진 저장
+                    string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    string imagePath = $"{timestamp}.jpg";
+                    bitmap.Save(imagePath);
+
+                    
+                    //AWS EC2에 사진 전송
+                    awsClient = new AwsClient();
+                    string responseJson = await awsClient.UploadImageToEC2(imagePath);
+                    MessageBox.Show("사진 전송후");
+
+                    MessageBox.Show("응답 전");
+                    // 응답 JSON 파싱
+                    var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
+                    MessageBox.Show("응답 후");
+
+                    // 서버로부터 감지된 객체와 S3 URL을 받아옴
+                    string detectedObject = responseObject.detected_object;
+                    string s3Url = responseObject.image_url;
+
+                    // 상태 결정
+                    string status = "OK";
+
+                    //색상 분석(박스) EC2 X
+                    string dominantColor = AnalyzeColor(captureMat);
+
+
+                    //불량 내용(밀크) 
+                    if (dominantColor == "Unknown")
+                    {
+                        if (detectedObject == "Milk")
+                        {
+
+                        }
+                        else if (detectedObject == "hole")
+                        {
+                            status = "NG";
+                            dominantColor = "Hole";
+                        }
+                        else if (detectedObject == "Scratch")
+                        {
+                            status = "NG";
+                            dominantColor = "Scratch";
+                        }
+                    }
+                    await tcpClientHandler.SendMessageAsync(dominantColor);
+                    
+                    
+                    // DataGridView에 데이터 추가
+                    var photoRecord = new PhotoRecord
+                    {
+                        SequenceNumber = photoSequenceNumber++,
+                        S3Url = s3Url,
+                        DominantColor = dominantColor,
+                        Status = status,
+                        DateTaken = DateTime.Now
+                    };
+
+                    // DataGridView에 새 행 추가
+                    dataGridView1.Rows.Add(
+                        photoRecord.SequenceNumber,
+                        photoRecord.S3Url,
+                        photoRecord.DominantColor,
+                        photoRecord.Status,
+                        photoRecord.DateTaken
+                    );
+
+                    //데이터베이스 저장 
+
+                }
+            }
+        }
+
+
+        //
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            await picture();
         }
     }
 }

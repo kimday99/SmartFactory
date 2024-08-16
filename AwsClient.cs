@@ -1,46 +1,38 @@
-﻿using Amazon;
-using Amazon.S3;
-using Amazon.S3.Transfer;
-using System;
+﻿using System;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 public class AwsClient
 {
-    // S3 버킷 이름
-    private const string bucketName = "";
-    // 서울 리전 설정
-    private static readonly RegionEndpoint bucketRegion = RegionEndpoint.APNortheast2;  
-
-    private IAmazonS3 s3Client;
+    private readonly HttpClient client;
+    // EC2 서버 URL
+    private readonly string _ec2Url = "http://127.0.0.1:5000/upload";
 
     public AwsClient()
     {
-        // AWS 자격 증명과 함께 클라이언트 생성
-        s3Client = new AmazonS3Client("", "", bucketRegion);
+        MessageBox.Show("생성자");
+        client = new HttpClient();
     }
 
-    public async Task UploadFileAsync(string filePath, string keyName)
+    public async Task<string> UploadImageToEC2(string imagePath)
     {
-        try
+        MessageBox.Show("메서드");
+        using (var content = new MultipartFormDataContent())
         {
-            var fileTransferUtility = new TransferUtility(s3Client);
+            var fileContent = new ByteArrayContent(File.ReadAllBytes(imagePath));
+            MessageBox.Show("1");
+            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+            MessageBox.Show("2");
+            content.Add(fileContent, "file", Path.GetFileName(imagePath));
+            MessageBox.Show("3");
 
-            // 파일 업로드
-            await fileTransferUtility.UploadAsync(filePath, bucketName, keyName);
-            Console.WriteLine("Upload completed");
+            var response = await client.PostAsync(_ec2Url, content);
+            MessageBox.Show("4");
+            response.EnsureSuccessStatusCode();
+            MessageBox.Show("5");
+            return await response.Content.ReadAsStringAsync();
         }
-        catch (AmazonS3Exception e)
-        {
-            Console.WriteLine($"Error encountered on server. Message:'{e.Message}' when writing an object");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Unknown encountered on server. Message:'{e.Message}' when writing an object");
-        }
-    }
-
-    public string GetFileUrl(string keyName)
-    {
-        return $"https://{bucketName}.s3.{bucketRegion.SystemName}.amazonaws.com/{keyName}";
-    }
+    }    
 }
