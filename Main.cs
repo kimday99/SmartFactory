@@ -48,7 +48,7 @@ namespace btnproject
             pb_cam.SizeMode = PictureBoxSizeMode.StretchImage;
             pb_histo.SizeMode = PictureBoxSizeMode.StretchImage;
             pb_search.SizeMode = PictureBoxSizeMode.StretchImage;
-            videoCapture = new VideoCapture(2, VideoCaptureAPIs.DSHOW);
+            videoCapture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
             isCameraOn = false;
             stop = false;
 
@@ -92,7 +92,7 @@ namespace btnproject
                 }
 
                 //새로운 카메라 스트림 열기
-                videoCapture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
+                videoCapture = new VideoCapture(1, VideoCaptureAPIs.DSHOW);
                 //CameraCallback 메서드를 비동기적으로 실행하여 카메라 스트리밍을 처리합니다
                 task = Task.Run(() => CameraCallback());
                 isCameraOn = true;
@@ -131,7 +131,6 @@ namespace btnproject
         private async Task CameraCallback()
         {
             mat = new Mat();
-
             while (!stop)
             {
                 if (videoCapture != null && videoCapture.IsOpened())
@@ -149,7 +148,6 @@ namespace btnproject
                 }
                 await Task.Delay(30);  // 프레임 속도 조절
             }
-
             mat.Release();
         }
 
@@ -157,7 +155,7 @@ namespace btnproject
         private string AnalyzeColor(Mat image)
         {
             //지배 색깔
-            string dominantColor="";
+            string dominantColor = "";
             if (isCameraOn && !mat.Empty())
             {
                 Mat StopImage = mat.Clone();
@@ -181,7 +179,7 @@ namespace btnproject
                 else if (greenMean > redMean + threshold && greenMean > blueMean + threshold)
                 {
                     dominantColor = "Green";
-                    pb_histo.BackColor=Color.Green;
+                    pb_histo.BackColor = Color.Green;
                 }
                 else if (blueMean > redMean + threshold && blueMean > greenMean + threshold)
                 {
@@ -192,9 +190,9 @@ namespace btnproject
                 {
                     dominantColor = "Unknown";
                     pb_histo.BackColor = (Color)Color.Black;
-                }              
+                }
             }
-            return dominantColor; 
+            return dominantColor;
         }
 
 
@@ -330,11 +328,11 @@ namespace btnproject
                 serverip = tb_server.Text;
                 serverport = int.Parse(tb_port.Text);
                 tcpClientHandler = new TcpClientHandler(serverip, serverport);
-                
+
                 // TCP 서버에 연결
                 try
                 {
-                  
+
                     await tcpClientHandler.ConnectAsync();
                     pb_hw.BackColor = Color.Green;
                     pb_sv.BackColor = Color.Green;
@@ -353,8 +351,7 @@ namespace btnproject
         //컨베이어 벨트 멈춤시?
         private void btn_logdel_Click(object sender, EventArgs e)
         {
-           
-            //dgv_trans.Rows.Clear();
+            dgv_trans.Rows.Clear();
         }
 
         //하드웨어 송신
@@ -379,7 +376,7 @@ namespace btnproject
             //컨베이어벨트 멈추고.
             if (message == "picture")
             {
-                await picture(); 
+                await picture();
             }
         }
 
@@ -410,18 +407,18 @@ namespace btnproject
                     // 로컬에 사진 저장
                     string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
                     string imagePath = $"{timestamp}.jpg";
+                    //bitmap.Save(imagePath, System.Drawing.Imaging.ImageFormat.Bmp);
                     bitmap.Save(imagePath);
 
-                    
+
                     //AWS EC2에 사진 전송
                     awsClient = new AwsClient();
                     string responseJson = await awsClient.UploadImageToEC2(imagePath);
-                    MessageBox.Show("사진 전송후");
 
-                    MessageBox.Show("응답 전");
+
                     // 응답 JSON 파싱
                     var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
-                    MessageBox.Show("응답 후");
+               
 
                     // 서버로부터 감지된 객체와 S3 URL을 받아옴
                     string detectedObject = responseObject.detected_object;
@@ -439,22 +436,26 @@ namespace btnproject
                     {
                         if (detectedObject == "Milk")
                         {
-
+                            dominantColor = "Milk";
+                            lb_okcnt.Text = (int.Parse(lb_okcnt.Text) +1).ToString();
                         }
                         else if (detectedObject == "hole")
                         {
                             status = "NG";
                             dominantColor = "Hole";
+                            lb_ngcnt_m.Text = (int.Parse(lb_ngcnt_m.Text) + 1).ToString();
                         }
                         else if (detectedObject == "Scratch")
                         {
                             status = "NG";
                             dominantColor = "Scratch";
+                            lb_ngcnt_m.Text = (int.Parse(lb_ngcnt_m.Text) + 1).ToString();
                         }
                     }
+                    lb_checkcnt_m.Text = (int.Parse(lb_okcnt.Text) + int.Parse(lb_ngcnt_m.Text)).ToString();
                     await tcpClientHandler.SendMessageAsync(dominantColor);
-                    
-                    
+
+
                     // DataGridView에 데이터 추가
                     var photoRecord = new PhotoRecord
                     {
@@ -474,8 +475,10 @@ namespace btnproject
                         photoRecord.DateTaken
                     );
 
-                    //데이터베이스 저장 
+                    //다시 컨베이어 벨트 시작
+                    TcpClientHandler_SendMessage();
 
+                    //데이터베이스 저장 
                 }
             }
         }
@@ -484,7 +487,7 @@ namespace btnproject
         //
         private async void button1_Click(object sender, EventArgs e)
         {
-            await picture();
+            //await picture();
         }
     }
 }
