@@ -37,7 +37,7 @@
             lb_ngcnt_b = new Label();
             lb_redcnt = new Label();
             lb_checkcnt_b = new Label();
-            lb_yellowcnt = new Label();
+            lb_bluecnt = new Label();
             lb_greencnt = new Label();
             lb_ng_b = new Label();
             lb_yellow = new Label();
@@ -53,8 +53,6 @@
             lb_ok = new Label();
             lb_check_m = new Label();
             group_info = new GroupBox();
-            pb_cam = new PictureBox();
-            button1 = new Button();
             dataGridView1 = new DataGridView();
             dgv_id = new DataGridViewTextBoxColumn();
             dgv_url = new DataGridViewLinkColumn();
@@ -74,6 +72,7 @@
             lb_date = new Label();
             lb_id = new Label();
             pb_search = new PictureBox();
+            pb_cam = new PictureBox();
             group_trans = new GroupBox();
             dgv_trans = new DataGridView();
             trans_num = new DataGridViewTextBoxColumn();
@@ -97,9 +96,9 @@
             page_milk.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             group_info.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pb_cam).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_search).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pb_cam).BeginInit();
             group_trans.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_trans).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_sv).BeginInit();
@@ -168,7 +167,7 @@
             tableLayoutPanel1.Controls.Add(lb_ngcnt_b, 4, 1);
             tableLayoutPanel1.Controls.Add(lb_redcnt, 0, 1);
             tableLayoutPanel1.Controls.Add(lb_checkcnt_b, 0, 1);
-            tableLayoutPanel1.Controls.Add(lb_yellowcnt, 0, 1);
+            tableLayoutPanel1.Controls.Add(lb_bluecnt, 0, 1);
             tableLayoutPanel1.Controls.Add(lb_greencnt, 0, 1);
             tableLayoutPanel1.Controls.Add(lb_ng_b, 4, 0);
             tableLayoutPanel1.Controls.Add(lb_yellow, 3, 0);
@@ -228,20 +227,20 @@
             lb_checkcnt_b.Text = "0";
             lb_checkcnt_b.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lb_yellowcnt
+            // lb_bluecnt
             // 
-            lb_yellowcnt.AutoSize = true;
-            lb_yellowcnt.BackColor = Color.Transparent;
-            lb_yellowcnt.BorderStyle = BorderStyle.FixedSingle;
-            lb_yellowcnt.Dock = DockStyle.Fill;
-            lb_yellowcnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lb_yellowcnt.ForeColor = Color.Blue;
-            lb_yellowcnt.Location = new Point(486, 95);
-            lb_yellowcnt.Name = "lb_yellowcnt";
-            lb_yellowcnt.Size = new Size(155, 239);
-            lb_yellowcnt.TabIndex = 7;
-            lb_yellowcnt.Text = "0";
-            lb_yellowcnt.TextAlign = ContentAlignment.MiddleCenter;
+            lb_bluecnt.AutoSize = true;
+            lb_bluecnt.BackColor = Color.Transparent;
+            lb_bluecnt.BorderStyle = BorderStyle.FixedSingle;
+            lb_bluecnt.Dock = DockStyle.Fill;
+            lb_bluecnt.Font = new Font("맑은 고딕", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lb_bluecnt.ForeColor = Color.Blue;
+            lb_bluecnt.Location = new Point(486, 95);
+            lb_bluecnt.Name = "lb_bluecnt";
+            lb_bluecnt.Size = new Size(155, 239);
+            lb_bluecnt.TabIndex = 7;
+            lb_bluecnt.Text = "0";
+            lb_bluecnt.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lb_greencnt
             // 
@@ -455,7 +454,6 @@
             // 
             // group_info
             // 
-            group_info.Controls.Add(button1);
             group_info.Controls.Add(dataGridView1);
             group_info.Controls.Add(btn_load);
             group_info.Controls.Add(btn_del);
@@ -475,25 +473,6 @@
             group_info.Size = new Size(997, 575);
             group_info.TabIndex = 7;
             group_info.TabStop = false;
-            // 
-            // pb_cam
-            // 
-            pb_cam.Location = new Point(10, 11);
-            pb_cam.Name = "pb_cam";
-            pb_cam.Size = new Size(640, 360);
-            pb_cam.TabIndex = 0;
-            pb_cam.TabStop = false;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(897, 64);
-            button1.Margin = new Padding(2);
-            button1.Name = "button1";
-            button1.Size = new Size(73, 50);
-            button1.TabIndex = 16;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // dataGridView1
             // 
@@ -657,6 +636,14 @@
             pb_search.Size = new Size(250, 230);
             pb_search.TabIndex = 4;
             pb_search.TabStop = false;
+            // 
+            // pb_cam
+            // 
+            pb_cam.Location = new Point(10, 11);
+            pb_cam.Name = "pb_cam";
+            pb_cam.Size = new Size(640, 360);
+            pb_cam.TabIndex = 0;
+            pb_cam.TabStop = false;
             // 
             // group_trans
             // 
@@ -825,7 +812,6 @@
             Controls.Add(btn_start);
             Name = "Main";
             Text = "Form1";
-            Load += Main_Load;
             ((System.ComponentModel.ISupportInitialize)pb_histo).EndInit();
             tab_things.ResumeLayout(false);
             page_box.ResumeLayout(false);
@@ -836,9 +822,9 @@
             tableLayoutPanel2.PerformLayout();
             group_info.ResumeLayout(false);
             group_info.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pb_cam).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_search).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pb_cam).EndInit();
             group_trans.ResumeLayout(false);
             group_trans.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_trans).EndInit();
@@ -877,7 +863,7 @@
         private Label lb_check_b;
         private Label lb_redcnt;
         private Label lb_checkcnt_b;
-        private Label lb_yellowcnt;
+        private Label lb_bluecnt;
         private TableLayoutPanel tableLayoutPanel2;
         private Label lb_okcnt;
         private Label lb_ng_m;
@@ -910,6 +896,5 @@
         private DataGridViewTextBoxColumn trans_trans;
         private DataGridViewTextBoxColumn trans_log;
         private DataGridViewTextBoxColumn trans_time;
-        private Button button1;
     }
 }

@@ -175,22 +175,27 @@ namespace btnproject
                 {
                     dominantColor = "Red";
                     pb_histo.BackColor = Color.Red;
+                    lb_redcnt.Text = (int.Parse(lb_redcnt.Text) + 1).ToString();
                 }
                 else if (greenMean > redMean + threshold && greenMean > blueMean + threshold)
                 {
                     dominantColor = "Green";
                     pb_histo.BackColor = Color.Green;
+                    lb_greencnt.Text = (int.Parse(lb_greencnt.Text) + 1).ToString();
                 }
                 else if (blueMean > redMean + threshold && blueMean > greenMean + threshold)
                 {
                     dominantColor = "Blue";
                     pb_histo.BackColor = Color.Blue;
+                    lb_bluecnt.Text = (int.Parse(lb_bluecnt.Text) + 1).ToString();
                 }
                 else
                 {
                     dominantColor = "Unknown";
                     pb_histo.BackColor = (Color)Color.Black;
+                    lb_ngcnt_b.Text = (int.Parse(lb_ngcnt_b.Text) + 1).ToString();
                 }
+                lb_checkcnt_b.Text = (int.Parse(lb_redcnt.Text) + int.Parse(lb_greencnt.Text) + int.Parse(lb_bluecnt.Text) + int.Parse(lb_ngcnt_b.Text)).ToString();
             }
             return dominantColor;
         }
@@ -306,12 +311,6 @@ namespace btnproject
             IOFile.WriteAllText("path/to/file.txt", "Content");
         }
 
-        //PC 와 하드웨어간 통신 연결
-        private void Main_Load(object sender, EventArgs e)
-        {
-
-        }
-
 
         //라즈베리파이 측으로 연결.
         private async void btn_connect_Click(object sender, EventArgs e)
@@ -401,6 +400,19 @@ namespace btnproject
                 //사진 찍었을때
                 if (!captureMat.Empty())
                 {
+                    // 이미지의 중앙 부분을 자르기 위해 Rect를 사용하여 관심 영역(ROI) 정의
+                    int width = captureMat.Width;
+                    int height = captureMat.Height;
+
+                    // 중앙 부분 자르기 (이미지 크기의 50% 크기를 중앙에서 자름)
+                    int cropWidth = width / 2;
+                    int cropHeight = height / 2;
+                    int x = (width - cropWidth) / 2;
+                    int y = (height - cropHeight) / 2;
+
+                    Rect roi = new Rect(x, y, cropWidth, cropHeight);
+                    Mat croppedMat = new Mat(captureMat, roi);
+
                     // 비트맵으로 변환
                     var bitmap = BitmapConverter.ToBitmap(captureMat);
 
@@ -418,7 +430,7 @@ namespace btnproject
 
                     // 응답 JSON 파싱
                     var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
-               
+
 
                     // 서버로부터 감지된 객체와 S3 URL을 받아옴
                     string detectedObject = responseObject.detected_object;
@@ -428,31 +440,8 @@ namespace btnproject
                     string status = "OK";
 
                     //색상 분석(박스) EC2 X
-                    string dominantColor = AnalyzeColor(captureMat);
-
-
-                    //불량 내용(밀크) 
-                    if (dominantColor == "Unknown")
-                    {
-                        if (detectedObject == "Milk")
-                        {
-                            dominantColor = "Milk";
-                            lb_okcnt.Text = (int.Parse(lb_okcnt.Text) +1).ToString();
-                        }
-                        else if (detectedObject == "hole")
-                        {
-                            status = "NG";
-                            dominantColor = "Hole";
-                            lb_ngcnt_m.Text = (int.Parse(lb_ngcnt_m.Text) + 1).ToString();
-                        }
-                        else if (detectedObject == "Scratch")
-                        {
-                            status = "NG";
-                            dominantColor = "Scratch";
-                            lb_ngcnt_m.Text = (int.Parse(lb_ngcnt_m.Text) + 1).ToString();
-                        }
-                    }
-                    lb_checkcnt_m.Text = (int.Parse(lb_okcnt.Text) + int.Parse(lb_ngcnt_m.Text)).ToString();
+                    string dominantColor = AnalyzeColor(croppedMat);
+          
                     await tcpClientHandler.SendMessageAsync(dominantColor);
 
 
@@ -479,15 +468,9 @@ namespace btnproject
                     TcpClientHandler_SendMessage();
 
                     //데이터베이스 저장 
+
                 }
             }
-        }
-
-
-        //
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            //await picture();
         }
     }
 }
