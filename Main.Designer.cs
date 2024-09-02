@@ -53,8 +53,11 @@
             lb_ok = new Label();
             lb_check_m = new Label();
             group_info = new GroupBox();
-            pb_cam = new PictureBox();
-            button1 = new Button();
+            btn_adapt = new Button();
+            cb_poor = new ComboBox();
+            lb_searchpoor = new Label();
+            lb_searchstatus = new Label();
+            cb_status = new ComboBox();
             dataGridView1 = new DataGridView();
             dgv_id = new DataGridViewTextBoxColumn();
             dgv_url = new DataGridViewLinkColumn();
@@ -74,6 +77,7 @@
             lb_date = new Label();
             lb_id = new Label();
             pb_search = new PictureBox();
+            pb_cam = new PictureBox();
             group_trans = new GroupBox();
             dgv_trans = new DataGridView();
             trans_num = new DataGridViewTextBoxColumn();
@@ -97,9 +101,9 @@
             page_milk.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             group_info.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pb_cam).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_search).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pb_cam).BeginInit();
             group_trans.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_trans).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_sv).BeginInit();
@@ -151,7 +155,7 @@
             page_box.Controls.Add(tableLayoutPanel1);
             page_box.Location = new Point(4, 24);
             page_box.Name = "page_box";
-            page_box.Padding = new Padding(3);
+            page_box.Padding = new Padding(3, 3, 3, 3);
             page_box.Size = new Size(802, 332);
             page_box.TabIndex = 0;
             page_box.Text = "박스";
@@ -337,7 +341,7 @@
             page_milk.Controls.Add(tableLayoutPanel2);
             page_milk.Location = new Point(4, 24);
             page_milk.Name = "page_milk";
-            page_milk.Padding = new Padding(3);
+            page_milk.Padding = new Padding(3, 3, 3, 3);
             page_milk.Size = new Size(802, 332);
             page_milk.TabIndex = 1;
             page_milk.Text = "우유";
@@ -455,7 +459,11 @@
             // 
             // group_info
             // 
-            group_info.Controls.Add(button1);
+            group_info.Controls.Add(btn_adapt);
+            group_info.Controls.Add(cb_poor);
+            group_info.Controls.Add(lb_searchpoor);
+            group_info.Controls.Add(lb_searchstatus);
+            group_info.Controls.Add(cb_status);
             group_info.Controls.Add(dataGridView1);
             group_info.Controls.Add(btn_load);
             group_info.Controls.Add(btn_del);
@@ -476,24 +484,57 @@
             group_info.TabIndex = 7;
             group_info.TabStop = false;
             // 
-            // pb_cam
+            // btn_adapt
             // 
-            pb_cam.Location = new Point(10, 11);
-            pb_cam.Name = "pb_cam";
-            pb_cam.Size = new Size(640, 360);
-            pb_cam.TabIndex = 0;
-            pb_cam.TabStop = false;
+            btn_adapt.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_adapt.Location = new Point(807, 194);
+            btn_adapt.Margin = new Padding(2, 2, 2, 2);
+            btn_adapt.Name = "btn_adapt";
+            btn_adapt.Size = new Size(110, 50);
+            btn_adapt.TabIndex = 30;
+            btn_adapt.Text = "ADAPT";
+            btn_adapt.UseVisualStyleBackColor = true;
+            btn_adapt.Click += btn_adapt_Click;
             // 
-            // button1
+            // cb_poor
             // 
-            button1.Location = new Point(897, 64);
-            button1.Margin = new Padding(2);
-            button1.Name = "button1";
-            button1.Size = new Size(73, 50);
-            button1.TabIndex = 16;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            cb_poor.FormattingEnabled = true;
+            cb_poor.Items.AddRange(new object[] { "Red", "Blue", "Green", "Hole", "Scratch" });
+            cb_poor.Location = new Point(807, 101);
+            cb_poor.Margin = new Padding(2, 2, 2, 2);
+            cb_poor.Name = "cb_poor";
+            cb_poor.Size = new Size(118, 23);
+            cb_poor.TabIndex = 29;
+            // 
+            // lb_searchpoor
+            // 
+            lb_searchpoor.AutoSize = true;
+            lb_searchpoor.Location = new Point(807, 84);
+            lb_searchpoor.Margin = new Padding(2, 0, 2, 0);
+            lb_searchpoor.Name = "lb_searchpoor";
+            lb_searchpoor.Size = new Size(39, 15);
+            lb_searchpoor.TabIndex = 28;
+            lb_searchpoor.Text = "POOR";
+            // 
+            // lb_searchstatus
+            // 
+            lb_searchstatus.AutoSize = true;
+            lb_searchstatus.Location = new Point(807, 33);
+            lb_searchstatus.Margin = new Padding(2, 0, 2, 0);
+            lb_searchstatus.Name = "lb_searchstatus";
+            lb_searchstatus.Size = new Size(49, 15);
+            lb_searchstatus.TabIndex = 27;
+            lb_searchstatus.Text = "STATUS";
+            // 
+            // cb_status
+            // 
+            cb_status.FormattingEnabled = true;
+            cb_status.Items.AddRange(new object[] { "NG", "OK" });
+            cb_status.Location = new Point(807, 53);
+            cb_status.Margin = new Padding(2, 2, 2, 2);
+            cb_status.Name = "cb_status";
+            cb_status.Size = new Size(118, 23);
+            cb_status.TabIndex = 26;
             // 
             // dataGridView1
             // 
@@ -551,7 +592,7 @@
             // btn_load
             // 
             btn_load.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_load.Location = new Point(772, 149);
+            btn_load.Location = new Point(664, 195);
             btn_load.Name = "btn_load";
             btn_load.Size = new Size(110, 50);
             btn_load.TabIndex = 17;
@@ -562,7 +603,7 @@
             // btn_del
             // 
             btn_del.Font = new Font("맑은 고딕", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_del.Location = new Point(772, 64);
+            btn_del.Location = new Point(664, 33);
             btn_del.Name = "btn_del";
             btn_del.Size = new Size(110, 50);
             btn_del.TabIndex = 16;
@@ -657,6 +698,14 @@
             pb_search.Size = new Size(250, 230);
             pb_search.TabIndex = 4;
             pb_search.TabStop = false;
+            // 
+            // pb_cam
+            // 
+            pb_cam.Location = new Point(10, 11);
+            pb_cam.Name = "pb_cam";
+            pb_cam.Size = new Size(640, 360);
+            pb_cam.TabIndex = 0;
+            pb_cam.TabStop = false;
             // 
             // group_trans
             // 
@@ -824,7 +873,7 @@
             Controls.Add(btn_stop);
             Controls.Add(btn_start);
             Name = "Main";
-            Text = "Form1";
+            Text = "SmartFactory";
             Load += Main_Load;
             ((System.ComponentModel.ISupportInitialize)pb_histo).EndInit();
             tab_things.ResumeLayout(false);
@@ -836,9 +885,9 @@
             tableLayoutPanel2.PerformLayout();
             group_info.ResumeLayout(false);
             group_info.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pb_cam).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_search).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pb_cam).EndInit();
             group_trans.ResumeLayout(false);
             group_trans.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_trans).EndInit();
@@ -910,6 +959,10 @@
         private DataGridViewTextBoxColumn trans_trans;
         private DataGridViewTextBoxColumn trans_log;
         private DataGridViewTextBoxColumn trans_time;
-        private Button button1;
+        private Button btn_adapt;
+        private ComboBox cb_poor;
+        private Label lb_searchpoor;
+        private Label lb_searchstatus;
+        private ComboBox cb_status;
     }
 }

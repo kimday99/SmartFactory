@@ -4,10 +4,7 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Text;
 using System.Net.Http;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Net.Mail;
 using System;
-using static System.Net.WebRequestMethods;
 using static OpenCvSharp.Stitcher;
 using Newtonsoft.Json;
 using IOFile = System.IO.File;
@@ -42,30 +39,36 @@ namespace btnproject
 
         private int trans_number = 1;
 
+
+        // 데이터베이스 연결 정보 설정
+        private string server = "localhost"; // 또는 실제 서버 주소
+        private string database = "smartfactory";
+        private string username = "root";
+        private string password = "1234";
+
         public Main()
         {
             InitializeComponent();
-            pb_cam.SizeMode = PictureBoxSizeMode.StretchImage;
-            pb_histo.SizeMode = PictureBoxSizeMode.StretchImage;
-            pb_search.SizeMode = PictureBoxSizeMode.StretchImage;
             videoCapture = new VideoCapture(0, VideoCaptureAPIs.DSHOW);
             isCameraOn = false;
             stop = false;
-
-            // TCP Client 초기화 (IP 주소와 포트 번호를 라즈베리파이 서버에 맞게 설정)
-            //tcpClientHandler = new TcpClientHandler("", 0);
 
             // AWS 클라이언트 초기화
             awsClient = new AwsClient();
 
             // DatabaseHandler 초기화 (MySQL 연결 정보 설정)
-            dbHandler = new DatabaseHandler("", "", "", "");
+            dbHandler = new DatabaseHandler(server, database, username, password);
+
 
             // DataGridView CellClick 이벤트 핸들러 등록
             dataGridView1.CellClick += dataGridView1_CellClick;
 
             // HttpClient 초기화
             httpClient = new HttpClient();
+
+            
+            pb_search.SizeMode = PictureBoxSizeMode.StretchImage;
+
         }
 
 
@@ -267,6 +270,7 @@ namespace btnproject
 
 
         //csv 다운로드 메서드
+        //csv 다운로드 메서드
         private void SaveDataGridViewToCsv(DataGridView dataGridView, string filePath)
         {
             // CSV 파일 작성
@@ -301,10 +305,12 @@ namespace btnproject
                 }
                 csvContent.AppendLine();
             }
-            // Write CSV to file
 
-            IOFile.WriteAllText("path/to/file.txt", "Content");
+            // Write CSV to file
+            System.IO.File.WriteAllText(filePath, csvContent.ToString());
         }
+
+
 
         //PC 와 하드웨어간 통신 연결
         private void Main_Load(object sender, EventArgs e)
@@ -412,13 +418,13 @@ namespace btnproject
 
 
                     //AWS EC2에 사진 전송
-                    awsClient = new AwsClient();
+                    awsClient = new AwsClient();                  
                     string responseJson = await awsClient.UploadImageToEC2(imagePath);
 
 
                     // 응답 JSON 파싱
                     var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
-               
+
 
                     // 서버로부터 감지된 객체와 S3 URL을 받아옴
                     string detectedObject = responseObject.detected_object;
@@ -437,7 +443,7 @@ namespace btnproject
                         if (detectedObject == "Milk")
                         {
                             dominantColor = "Milk";
-                            lb_okcnt.Text = (int.Parse(lb_okcnt.Text) +1).ToString();
+                            lb_okcnt.Text = (int.Parse(lb_okcnt.Text) + 1).ToString();
                         }
                         else if (detectedObject == "hole")
                         {
@@ -475,10 +481,28 @@ namespace btnproject
                         photoRecord.DateTaken
                     );
 
+                    //데이터베이스 저장 
+                    // **여기서 데이터베이스에 저장합니다.**
+                    try
+                    {
+                        dbHandler.InsertObject(
+                        photoRecord.SequenceNumber,
+                        photoRecord.S3Url,
+                        photoRecord.DominantColor,
+                        photoRecord.Status,
+                        photoRecord.DateTaken.ToString("yyyy-MM-dd HH:mm:ss")
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"데이터베이스에 저장하는 중 오류가 발생했습니다: {ex.Message}");
+                    }
+
                     //다시 컨베이어 벨트 시작
                     TcpClientHandler_SendMessage();
 
-                    //데이터베이스 저장 
+
+
                 }
             }
         }
@@ -488,6 +512,48 @@ namespace btnproject
         private async void button1_Click(object sender, EventArgs e)
         {
             //await picture();
+        }
+
+        //검색 적용 버튼
+        private void btn_adapt_Click(object sender, EventArgs e)
+        {
+
+            // 선택된 콤보박스 값 가져오기
+            string selectedStatus = cb_status.Text;
+            string selectedPoor = cb_poor.Text;
+
+            // 데이터를 가져옵니다.
+            List<Dictionary<string, object>> records = dbHandler.SelectObjects(status: selectedStatus, poor: selectedPoor);
+
+            // DataGridView를 초기화합니다.
+            dataGridView1.Rows.Clear();
+            dataGridView1.Columns.Clear();
+
+            if (records.Count > 0)
+            {
+                // 첫 번째 레코드의 키를 기반으로 컬럼 생성
+                foreach (var column in records[0].Keys)
+                {
+                    dataGridView1.Columns.Add(column, column);
+                }
+
+                // 데이터 행 추가
+                foreach (var record in records)
+                {
+                    int rowIndex = dataGridView1.Rows.Add();
+                    foreach (var column in record.Keys)
+                    {
+                        dataGridView1.Rows[rowIndex].Cells[column].Value = record[column];
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No records found with the specified criteria.");
+            }
+
+
+
         }
     }
 }
